@@ -5,7 +5,6 @@ import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputConnection;
 
@@ -57,10 +56,10 @@ public class UnmuktoKeyboardService
             char shongkha = shoroBornoString.charAt(primaryCode - 130);
             ic.commitText(String.valueOf(shongkha), 1);
         } else if (primaryCode >= 140 && primaryCode <= 151) {
-            char shoroBorno = shoroBornoString.charAt((primaryCode - 140 * 2) - 1);
+            char shoroBorno = shoroBornoString.charAt((primaryCode - 140) * 2 + 1);
             ic.commitText(String.valueOf(shoroBorno), 1);
         } else if (primaryCode >= 160 && primaryCode <= 169) {
-            char kar = karString.charAt((primaryCode - 160 * 2) - 1);
+            char kar = karString.charAt((primaryCode - 160) * 2 + 1);
             ic.commitText(String.valueOf(kar), 1);
         } else if (primaryCode >= 170 && primaryCode <= 208) {
             char benjonBorno = benjonBornoString.charAt(primaryCode - 170);
