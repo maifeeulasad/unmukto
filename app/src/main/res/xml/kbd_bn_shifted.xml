@@ -23,7 +23,7 @@
         <Key android:codes="-188" android:keyOutputText='ধ' android:keyLabel="ধ" android:keyEdgeFlags="left"/>
         <Key android:codes="-145" android:keyOutputText='ঊ' android:keyLabel="ঊ"/>
         <Key android:codes="-143" android:keyOutputText='ঈ' android:keyLabel="ঈ"/>
-        <Key android:codes="-201" android:keyOutputText='ড' android:keyLabel="ড"/>
+        <Key android:codes="-182" android:keyOutputText='ড' android:keyLabel="ড"/>
         <Key android:codes="-181" android:keyOutputText='ঠ' android:keyLabel="ঠ"/>
         <Key android:codes="-148" android:keyOutputText='ঐ' android:keyLabel="ঐ"/>
         <Key android:codes="-144" android:keyOutputText='উ' android:keyLabel="উ"/>

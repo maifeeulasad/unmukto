@@ -13,6 +13,7 @@ public class UnmuktoKeyboardService
         extends InputMethodService
         implements KeyboardView.OnKeyboardActionListener {
 
+    private final String shongkhaString = "০১২৩৪৫৬৭৮৯";
     private final String shoroBornoString = " অ আ ই ঈ উ ঊ ঋ এ ঐ ও ঔ";
     private final String karString = " া ি ী ু ূ ৃ ে ৈ ো ৌ";
     private final String benjonBornoString = "কখগঘঙচছজঝঞটঠডঢণতথদধনপফবভমযরলশষসহড়ঢ়য়ৎংঃঁ";
@@ -52,8 +53,10 @@ public class UnmuktoKeyboardService
         if (ic == null)
             return;
         primaryCode = -primaryCode;
-        Log.d("d--mua",primaryCode+" : ");
-        if (primaryCode >= 140 && primaryCode <= 151) {
+        if (primaryCode >= 130 && primaryCode <= 139) {
+            char shongkha = shoroBornoString.charAt(primaryCode - 130);
+            ic.commitText(String.valueOf(shongkha), 1);
+        } else if (primaryCode >= 140 && primaryCode <= 151) {
             char shoroBorno = shoroBornoString.charAt((primaryCode - 140 * 2) - 1);
             ic.commitText(String.valueOf(shoroBorno), 1);
         } else if (primaryCode >= 160 && primaryCode <= 169) {
