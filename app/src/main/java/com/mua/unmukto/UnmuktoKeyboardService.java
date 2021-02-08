@@ -5,6 +5,7 @@ import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputConnection;
 
@@ -16,6 +17,17 @@ public class UnmuktoKeyboardService
     private final String shoroBornoString = " অ আ ই ঈ উ ঊ ঋ এ ঐ ও ঔ";
     private final String karString = " া ি ী ু ূ ৃ ে ৈ ো ৌ";
     private final String benjonBornoString = "কখগঘঙচছজঝঞটঠডঢণতথদধনপফবভমযরলশষসহড়ঢ়য়ৎংঃঁ";
+
+    private final int SHONGKHA_LOWER_BOUND = 130;
+    private final int SHOROBORNO_LOWER_BOUND = 140;
+    private final int KAR_LOWER_BOUND = 160;
+    private final int BENJONBORNO_LOWER_BOUND = 170;
+
+    private final int SHONGKHA_UPPER_BOUND = 139;
+    private final int SHOROBORNO_UPPER_BOUND = 151;
+    private final int KAR_UPPER_BOUND = 169;
+    private final int BENJONBORNO_UPPER_BOUND = 208;
+
     private KeyboardView keyboardView;
 
     @Override
@@ -52,17 +64,17 @@ public class UnmuktoKeyboardService
         if (ic == null)
             return;
         primaryCode = -primaryCode;
-        if (primaryCode >= 130 && primaryCode <= 139) {
-            char shongkha = shoroBornoString.charAt(primaryCode - 130);
+        if (primaryCode >= SHONGKHA_LOWER_BOUND && primaryCode <= SHONGKHA_UPPER_BOUND) {
+            char shongkha = shongkhaString.charAt(primaryCode - SHONGKHA_LOWER_BOUND);
             ic.commitText(String.valueOf(shongkha), 1);
-        } else if (primaryCode >= 140 && primaryCode <= 151) {
-            char shoroBorno = shoroBornoString.charAt((primaryCode - 140) * 2 + 1);
+        } else if (primaryCode >= SHOROBORNO_LOWER_BOUND && primaryCode <= SHOROBORNO_UPPER_BOUND) {
+            char shoroBorno = shoroBornoString.charAt((primaryCode - SHOROBORNO_LOWER_BOUND) * 2 + 1);
             ic.commitText(String.valueOf(shoroBorno), 1);
-        } else if (primaryCode >= 160 && primaryCode <= 169) {
-            char kar = karString.charAt((primaryCode - 160) * 2 + 1);
+        } else if (primaryCode >= KAR_LOWER_BOUND && primaryCode <= KAR_UPPER_BOUND) {
+            char kar = karString.charAt((primaryCode - KAR_LOWER_BOUND) * 2 + 1);
             ic.commitText(String.valueOf(kar), 1);
-        } else if (primaryCode >= 170 && primaryCode <= 208) {
-            char benjonBorno = benjonBornoString.charAt(primaryCode - 170);
+        } else if (primaryCode >= BENJONBORNO_LOWER_BOUND && primaryCode <= BENJONBORNO_UPPER_BOUND) {
+            char benjonBorno = benjonBornoString.charAt(primaryCode - BENJONBORNO_LOWER_BOUND);
             ic.commitText(String.valueOf(benjonBorno), 1);
         }
     }

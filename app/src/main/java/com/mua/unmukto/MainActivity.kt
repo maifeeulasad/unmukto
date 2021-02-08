@@ -25,11 +25,9 @@ class MainActivity : AppCompatActivity(), OnKeyboardActionListener {
     }
 
     override fun onPress(primaryCode: Int) {
-        Log.d("d--mua", "press : $primaryCode")
     }
 
     override fun onRelease(primaryCode: Int) {
-        Log.d("d--mua", "release : $primaryCode")
     }
 
     override fun onKey(primaryCode: Int, keyCodes: IntArray) {
@@ -45,18 +43,14 @@ class MainActivity : AppCompatActivity(), OnKeyboardActionListener {
     }
 
     override fun swipeLeft() {
-        Log.d("d--mua", "left")
     }
 
     override fun swipeRight() {
-        Log.d("d--mua", "right")
     }
 
     override fun swipeDown() {
-        Log.d("d--mua", "down")
     }
 
     override fun swipeUp() {
-        Log.d("d--mua", "up")
     }
 }
