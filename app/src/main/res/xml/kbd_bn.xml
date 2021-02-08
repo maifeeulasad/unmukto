@@ -57,7 +57,7 @@
         <Key android:codes="-189" android:keyOutputText='ন' android:keyLabel="ন"/>
         <Key android:codes="-194" android:keyOutputText='ম' android:keyLabel="ম"/>
         <Key android:codes="-165" android:keyOutputText='ৃ' android:keyLabel="ৃ"/>
-        <Key android:codes="-123" android:keyOutputText='়' android:keyLabel="়" android:keyEdgeFlags="right"/>
+        <Key android:codes="-210" android:keyOutputText='্' android:keyLabel="্" android:keyEdgeFlags="right"/>
     </Row>
 
 

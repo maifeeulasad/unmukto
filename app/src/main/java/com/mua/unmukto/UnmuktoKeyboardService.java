@@ -16,16 +16,19 @@ public class UnmuktoKeyboardService
     private final String SHORO_BORNO_STRING = " অ আ ই ঈ উ ঊ ঋ এ ঐ ও ঔ";
     private final String KAR_STRING = " া ি ী ু ূ ৃ ে ৈ ো ৌ";
     private final String BENJON_BORNO_STRING = "কখগঘঙচছজঝঞটঠডঢণতথদধনপফবভমযরলশষসহড়ঢ়য়ৎংঃঁ";
+    private final String FOLA_STRING = " ্";
 
     private final int SHONGKHA_LOWER_BOUND = 130;
     private final int SHOROBORNO_LOWER_BOUND = 140;
     private final int KAR_LOWER_BOUND = 160;
     private final int BENJONBORNO_LOWER_BOUND = 170;
+    private final int FOLA_LOWER_BOUND = 210;
 
     private final int SHONGKHA_UPPER_BOUND = 139;
     private final int SHOROBORNO_UPPER_BOUND = 151;
     private final int KAR_UPPER_BOUND = 169;
     private final int BENJONBORNO_UPPER_BOUND = 208;
+    private final int FOLA_UPPER_BOUND = 210;
 
     private final int SPECIAL_CHAR_COMMA = -300;
     private final int SPECIAL_CHAR_DARI = -301;
@@ -85,6 +88,9 @@ public class UnmuktoKeyboardService
         } else if (primaryCode >= BENJONBORNO_LOWER_BOUND && primaryCode <= BENJONBORNO_UPPER_BOUND) {
             char benjonBorno = BENJON_BORNO_STRING.charAt(primaryCode - BENJONBORNO_LOWER_BOUND);
             ic.commitText(String.valueOf(benjonBorno), 1);
+        }else if (primaryCode >= FOLA_LOWER_BOUND && primaryCode <= FOLA_UPPER_BOUND) {
+            char fola = FOLA_STRING.charAt((primaryCode - FOLA_LOWER_BOUND) * 2 +1);
+            ic.commitText(String.valueOf(fola), 1);
         }
     }
 
