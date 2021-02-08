@@ -4,6 +4,7 @@ package com.mua.unmukto;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputConnection;
 
@@ -31,6 +32,15 @@ public class UnmuktoKeyboardService
             keyboardView.setKeyboard(new Keyboard(this, R.xml.kbd_bn_shifted));
         } else if (primaryCode == -121) {
             keyboardView.setKeyboard(new Keyboard(this, R.xml.kbd_bn));
+        } else if (primaryCode == Keyboard.KEYCODE_DELETE) {
+            CharSequence selectedText = ic.getSelectedText(0);
+            if (TextUtils.isEmpty(selectedText)) {
+                ic.deleteSurroundingText(1, 0);
+            } else {
+                ic.commitText("", 1);
+            }
+        } else {
+            //todo : create and read mapping
         }
     }
 
