@@ -5,6 +5,7 @@ import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputConnection;
 
@@ -12,6 +13,9 @@ public class UnmuktoKeyboardService
         extends InputMethodService
         implements KeyboardView.OnKeyboardActionListener {
 
+    private final String shoroBornoString = " অ আ ই ঈ উ ঊ ঋ এ ঐ ও ঔ";
+    private final String karString = " া ি ী ু ূ ৃ ে ৈ ো ৌ";
+    private final String benjonBornoString = "কখগঘঙচছজঝঞটঠডঢণতথদধনপফবভমযরলশষসহড়ঢ়য়ৎংঃঁ";
     private KeyboardView keyboardView;
 
     @Override
@@ -39,13 +43,26 @@ public class UnmuktoKeyboardService
             } else {
                 ic.commitText("", 1);
             }
-        } else {
-            //todo : create and read mapping
         }
     }
 
     @Override
     public void onPress(int primaryCode) {
+        InputConnection ic = getCurrentInputConnection();
+        if (ic == null)
+            return;
+        primaryCode = -primaryCode;
+        Log.d("d--mua",primaryCode+" : ");
+        if (primaryCode >= 140 && primaryCode <= 151) {
+            char shoroBorno = shoroBornoString.charAt((primaryCode - 140 * 2) - 1);
+            ic.commitText(String.valueOf(shoroBorno), 1);
+        } else if (primaryCode >= 160 && primaryCode <= 169) {
+            char kar = karString.charAt((primaryCode - 160 * 2) - 1);
+            ic.commitText(String.valueOf(kar), 1);
+        } else if (primaryCode >= 170 && primaryCode <= 208) {
+            char benjonBorno = benjonBornoString.charAt(primaryCode - 170);
+            ic.commitText(String.valueOf(benjonBorno), 1);
+        }
     }
 
     @Override
