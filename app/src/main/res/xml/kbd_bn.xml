@@ -63,9 +63,9 @@
 
     <Row>
         <Key android:codes="-120" android:keyLabel="⇧" android:keyEdgeFlags="left"/>
-        <Key android:codes="-123" android:keyOutputText=',' android:keyLabel=","/>
-        <Key android:codes="-123" android:keyOutputText=' ' android:keyLabel=" "/>
-        <Key android:codes="-123" android:keyOutputText='।' android:keyLabel="।"/>
+        <Key android:codes="-300" android:keyOutputText=',' android:keyLabel=","/>
+        <Key android:codes="62" android:keyOutputText=' ' android:keyLabel=" "/>
+        <Key android:codes="-301" android:keyOutputText='।' android:keyLabel="।"/>
         <Key android:codes="-5" android:keyLabel="←" android:isRepeatable="true" android:keyEdgeFlags="right"/>
     </Row>
 

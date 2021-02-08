@@ -5,7 +5,6 @@ import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputConnection;
 
@@ -13,10 +12,10 @@ public class UnmuktoKeyboardService
         extends InputMethodService
         implements KeyboardView.OnKeyboardActionListener {
 
-    private final String shongkhaString = "০১২৩৪৫৬৭৮৯";
-    private final String shoroBornoString = " অ আ ই ঈ উ ঊ ঋ এ ঐ ও ঔ";
-    private final String karString = " া ি ী ু ূ ৃ ে ৈ ো ৌ";
-    private final String benjonBornoString = "কখগঘঙচছজঝঞটঠডঢণতথদধনপফবভমযরলশষসহড়ঢ়য়ৎংঃঁ";
+    private final String SHONGKHA_STRING = "০১২৩৪৫৬৭৮৯";
+    private final String SHORO_BORNO_STRING = " অ আ ই ঈ উ ঊ ঋ এ ঐ ও ঔ";
+    private final String KAR_STRING = " া ি ী ু ূ ৃ ে ৈ ো ৌ";
+    private final String BENJON_BORNO_STRING = "কখগঘঙচছজঝঞটঠডঢণতথদধনপফবভমযরলশষসহড়ঢ়য়ৎংঃঁ";
 
     private final int SHONGKHA_LOWER_BOUND = 130;
     private final int SHOROBORNO_LOWER_BOUND = 140;
@@ -27,6 +26,9 @@ public class UnmuktoKeyboardService
     private final int SHOROBORNO_UPPER_BOUND = 151;
     private final int KAR_UPPER_BOUND = 169;
     private final int BENJONBORNO_UPPER_BOUND = 208;
+
+    private final int SPECIAL_CHAR_COMMA = -300;
+    private final int SPECIAL_CHAR_DARI = -301;
 
     private KeyboardView keyboardView;
 
@@ -63,18 +65,25 @@ public class UnmuktoKeyboardService
         InputConnection ic = getCurrentInputConnection();
         if (ic == null)
             return;
+        if(primaryCode == 62){
+            ic.commitText(" ", 1);
+        }else if(primaryCode == SPECIAL_CHAR_COMMA){
+            ic.commitText(",",1);
+        }else if(primaryCode == SPECIAL_CHAR_DARI){
+            ic.commitText("।",1);
+        }
         primaryCode = -primaryCode;
         if (primaryCode >= SHONGKHA_LOWER_BOUND && primaryCode <= SHONGKHA_UPPER_BOUND) {
-            char shongkha = shongkhaString.charAt(primaryCode - SHONGKHA_LOWER_BOUND);
+            char shongkha = SHONGKHA_STRING.charAt(primaryCode - SHONGKHA_LOWER_BOUND);
             ic.commitText(String.valueOf(shongkha), 1);
         } else if (primaryCode >= SHOROBORNO_LOWER_BOUND && primaryCode <= SHOROBORNO_UPPER_BOUND) {
-            char shoroBorno = shoroBornoString.charAt((primaryCode - SHOROBORNO_LOWER_BOUND) * 2 + 1);
+            char shoroBorno = SHORO_BORNO_STRING.charAt((primaryCode - SHOROBORNO_LOWER_BOUND) * 2 + 1);
             ic.commitText(String.valueOf(shoroBorno), 1);
         } else if (primaryCode >= KAR_LOWER_BOUND && primaryCode <= KAR_UPPER_BOUND) {
-            char kar = karString.charAt((primaryCode - KAR_LOWER_BOUND) * 2 + 1);
+            char kar = KAR_STRING.charAt((primaryCode - KAR_LOWER_BOUND) * 2 + 1);
             ic.commitText(String.valueOf(kar), 1);
         } else if (primaryCode >= BENJONBORNO_LOWER_BOUND && primaryCode <= BENJONBORNO_UPPER_BOUND) {
-            char benjonBorno = benjonBornoString.charAt(primaryCode - BENJONBORNO_LOWER_BOUND);
+            char benjonBorno = BENJON_BORNO_STRING.charAt(primaryCode - BENJONBORNO_LOWER_BOUND);
             ic.commitText(String.valueOf(benjonBorno), 1);
         }
     }

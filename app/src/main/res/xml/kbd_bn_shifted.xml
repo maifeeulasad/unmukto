@@ -59,16 +59,16 @@
         <Key android:codes="-184" android:keyOutputText='ণ' android:keyLabel="ণ"/>
         <Key android:codes="-174" android:keyOutputText='ঙ' android:keyLabel="ঙ"/>
         <Key android:codes="-165" android:keyOutputText='ৃ' android:keyLabel="ৃ"/>
-        <Key android:codes="-123" android:keyOutputText='ঁ' android:keyLabel="ঁ" android:keyEdgeFlags="right"/>
+        <Key android:codes="-208" android:keyOutputText='ঁ' android:keyLabel="ঁ" android:keyEdgeFlags="right"/>
     </Row>
 
 
 
     <Row>
         <Key android:codes="-121" android:keyLabel="⇧" android:keyEdgeFlags="left"/>
-        <Key android:codes="-123" android:keyOutputText=',' android:keyLabel=","/>
-        <Key android:codes="-123" android:keyOutputText=' ' android:keyLabel=" "/>
-        <Key android:codes="-123" android:keyOutputText='।' android:keyLabel="।"/>
+        <Key android:codes="-300" android:keyOutputText=',' android:keyLabel=","/>
+        <Key android:codes="62" android:keyOutputText=' ' android:keyLabel=" "/>
+        <Key android:codes="-301" android:keyOutputText='।' android:keyLabel="।"/>
         <Key android:codes="-5" android:keyLabel="←" android:isRepeatable="true" android:keyEdgeFlags="right"/>
     </Row>
 
