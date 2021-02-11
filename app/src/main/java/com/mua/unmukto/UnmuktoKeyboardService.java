@@ -8,6 +8,9 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.InputConnection;
 
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 public class UnmuktoKeyboardService
         extends InputMethodService
         implements KeyboardView.OnKeyboardActionListener {
@@ -33,15 +36,21 @@ public class UnmuktoKeyboardService
     private final int SPECIAL_CHAR_COMMA = -300;
     private final int SPECIAL_CHAR_DARI = -301;
 
-    private KeyboardView keyboardView;
+    private KeyboardView ukvMain;
+    private RecyclerView rvSuggestions;
 
     @Override
     public View onCreateInputView() {
-        keyboardView = (KeyboardView) getLayoutInflater().inflate(R.layout.layout_unmukto, null);
+        View view = getLayoutInflater().inflate(R.layout.layout_unmukto, null, false);
+        ukvMain = view.findViewById(R.id.ukv_main);
+        rvSuggestions = view.findViewById(R.id.rv_suggestions);
+        LinearLayoutManager linearLayoutManager
+                = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
+        rvSuggestions.setLayoutManager(linearLayoutManager);
         Keyboard keyboard = new Keyboard(this, R.xml.kbd_bn);
-        keyboardView.setKeyboard(keyboard);
-        keyboardView.setOnKeyboardActionListener(this);
-        return keyboardView;
+        ukvMain.setKeyboard(keyboard);
+        ukvMain.setOnKeyboardActionListener(this);
+        return view;
     }
 
     @Override
@@ -50,9 +59,9 @@ public class UnmuktoKeyboardService
         if (ic == null)
             return;
         if (primaryCode == -120) {
-            keyboardView.setKeyboard(new Keyboard(this, R.xml.kbd_bn_shifted));
+            ukvMain.setKeyboard(new Keyboard(this, R.xml.kbd_bn_shifted));
         } else if (primaryCode == -121) {
-            keyboardView.setKeyboard(new Keyboard(this, R.xml.kbd_bn));
+            ukvMain.setKeyboard(new Keyboard(this, R.xml.kbd_bn));
         } else if (primaryCode == Keyboard.KEYCODE_DELETE) {
             CharSequence selectedText = ic.getSelectedText(0);
             if (TextUtils.isEmpty(selectedText)) {
@@ -68,12 +77,12 @@ public class UnmuktoKeyboardService
         InputConnection ic = getCurrentInputConnection();
         if (ic == null)
             return;
-        if(primaryCode == 62){
+        if (primaryCode == 62) {
             ic.commitText(" ", 1);
-        }else if(primaryCode == SPECIAL_CHAR_COMMA){
-            ic.commitText(",",1);
-        }else if(primaryCode == SPECIAL_CHAR_DARI){
-            ic.commitText("।",1);
+        } else if (primaryCode == SPECIAL_CHAR_COMMA) {
+            ic.commitText(",", 1);
+        } else if (primaryCode == SPECIAL_CHAR_DARI) {
+            ic.commitText("।", 1);
         }
         primaryCode = -primaryCode;
         if (primaryCode >= SHONGKHA_LOWER_BOUND && primaryCode <= SHONGKHA_UPPER_BOUND) {
@@ -88,8 +97,8 @@ public class UnmuktoKeyboardService
         } else if (primaryCode >= BENJONBORNO_LOWER_BOUND && primaryCode <= BENJONBORNO_UPPER_BOUND) {
             char benjonBorno = BENJON_BORNO_STRING.charAt(primaryCode - BENJONBORNO_LOWER_BOUND);
             ic.commitText(String.valueOf(benjonBorno), 1);
-        }else if (primaryCode >= FOLA_LOWER_BOUND && primaryCode <= FOLA_UPPER_BOUND) {
-            char fola = FOLA_STRING.charAt((primaryCode - FOLA_LOWER_BOUND) * 2 +1);
+        } else if (primaryCode >= FOLA_LOWER_BOUND && primaryCode <= FOLA_UPPER_BOUND) {
+            char fola = FOLA_STRING.charAt((primaryCode - FOLA_LOWER_BOUND) * 2 + 1);
             ic.commitText(String.valueOf(fola), 1);
         }
     }
