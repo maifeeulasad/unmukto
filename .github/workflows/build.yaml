@@ -1,0 +1,46 @@
+name: build Android
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 'Updating ubuntu deps'    
+      run: sudo apt update --fix-missing && sudo apt upgrade -y
+    - name: 'Installing deps'    
+      run: sudo apt install -y android-tools-adb android-tools-fastboot default-jre default-jdk android-sdk
+    - name: 'Exporting android sdk'    
+      run: export ANDROID_SDK_ROOT=/usr/lib/android-sdk
+    - name: 'Download and extract android-cli tools'    
+      run: wget https://dl.google.com/android/repository/commandlinetools-linux-9123335_latest.zip && sudo mkdir /usr/lib/android-sdk/cmdline-tools && sudo unzip -o commandlinetools-linux-9123335_latest.zip -d /usr/lib/android-sdk/cmdline-tools
+    - name: 'Exporting android-cli (sdkmanager) ,'    
+      run: export PATH=$ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools/bin:$PATH
+    - name: 'Reload bash'    
+      run: . ~/.bashrc
+    - name: 'Clearing the clutter'    
+      run: rm commandlinetools-linux-9123335_latest.zip
+    - name: 'adb version'    
+      run: adb version
+    - name: 'java version'    
+      run: java -version
+    - name: 'java-compiler version'    
+      run: javac -version
+    - name: 'sdkmanager version'    
+      run: sdkmanager --version
+    - name: 'install buildtool 30.0.3 and accept license'    
+      run: yes | sudo /usr/lib/android-sdk/cmdline-tools/cmdline-tools/bin/sdkmanager "build-tools;30.0.3" "platform-tools"
+    - name: 'accept all licenses'    
+      run: yes | sdkmanager --licenses
+    - name: 'transfer ownership (as tools are installed under root, they need to excuted under root) ,'    
+      run: sudo chown -R $(whoami) $ANDROID_SDK_ROOT
+    - name: 'Build android project'    
+      run: ./gradlew assembleDebug
+    - name: 'Check'    
+      run: ls app/build/outputs/apk/debug/
