@@ -12,6 +12,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - name: 'Linux info'
+      run: lsb_release -a
     - name: 'Updating ubuntu deps'    
       run: sudo apt update --fix-missing && sudo apt upgrade -y
     - name: 'Installing deps'    
@@ -28,6 +30,8 @@ jobs:
       run: rm commandlinetools-linux-9123335_latest.zip
     - name: 'adb version'    
       run: adb version
+    - name: 'unzip version'    
+      run: unzip --version
     - name: 'java version'    
       run: java -version
     - name: 'java-compiler version'    
