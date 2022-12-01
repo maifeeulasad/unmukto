@@ -24,6 +24,8 @@ jobs:
       run: wget https://dl.google.com/android/repository/commandlinetools-linux-9123335_latest.zip && sudo mkdir /usr/lib/android-sdk/cmdline-tools && sudo unzip -o commandlinetools-linux-9123335_latest.zip -d /usr/lib/android-sdk/cmdline-tools
     - name: 'Exporting android-cli (sdkmanager) ,'    
       run: export PATH=$ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools/bin:$PATH
+    - name: 'Listing commandlinetools.zip'
+      run: unzip -l commandlinetools-linux-9123335_latest.zip
     - name: 'Reload bash'    
       run: . ~/.bashrc
     - name: 'Clearing the clutter'    
@@ -31,6 +33,7 @@ jobs:
     - name: 'adb version'    
       run: adb version
     - name: 'unzip version'    
+      continue-on-error: true
       run: unzip --version
     - name: 'java version'    
       run: java -version
