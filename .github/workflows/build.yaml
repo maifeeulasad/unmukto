@@ -23,13 +23,13 @@ jobs:
     - name: 'Download and extract android-cli tools'    
       run: curl https://dl.google.com/android/repository/commandlinetools-linux-9123335_latest.zip --output commandlinetools-linux-9123335_latest.zip && sudo mkdir /usr/lib/android-sdk/cmdline-tools && sudo unzip -o commandlinetools-linux-9123335_latest.zip -d /usr/lib/android-sdk/cmdline-tools
     - name: 'Exporting android-cli (sdkmanager) ,'    
-      run: export PATH=$ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools/bin:$PATH
+      run: export PATH="${PATH}:$ANDROID_SDK_ROOT/cmdline-tools/cmdline-tools/bin"
     - name: 'Listing commandlinetools.zip'
       run: unzip -l commandlinetools-linux-9123335_latest.zip
     - name: 'Reload bash'    
       run: . ~/.bashrc
     - name: 'echo'
-      run: echo $ANDROID_SDK_ROOT && echo $PATH
+      run: echo $ANDROID_SDK_ROOT && echo $PATH | tr ':' '\n'
     - name: 'Clearing the clutter'    
       run: rm commandlinetools-linux-9123335_latest.zip
     - name: 'adb version'    
