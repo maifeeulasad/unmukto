@@ -2,9 +2,7 @@ name: debug build Android
 
 on:
   push:
-    branches: [ main ]
-  pull_request:
-    branches: [ main ]
+    branches: [ test-pipeline ]
 
 jobs:
   build:
@@ -47,6 +45,8 @@ jobs:
       run: yes | /usr/lib/android-sdk/cmdline-tools/cmdline-tools/bin/sdkmanager --licenses
     - name: 'transfer ownership (as tools are installed under root, they need to excuted under root) ,'    
       run: sudo chown -R $(whoami) $ANDROID_SDK_ROOT
+    - name: 'ls current dir'
+      run: ls
     - name: 'Build android project'    
       run: ./gradlew assembleDebug
     - name: 'list build directory'    
