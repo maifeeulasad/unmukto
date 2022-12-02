@@ -3,7 +3,7 @@ name: debug build Android
 on:
   push:
     branches: [ main ]
-  pull_request:
+  pull_request:	
     branches: [ main ]
 
 jobs:
@@ -12,6 +12,7 @@ jobs:
     runs-on: ubuntu-latest
       
     steps:
+    - uses: actions/checkout@v1
     - name: 'Linux info'
       run: lsb_release -a
     - name: 'Updating ubuntu deps'    
