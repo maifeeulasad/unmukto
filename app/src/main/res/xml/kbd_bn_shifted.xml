@@ -1,75 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
-          android:horizontalGap="0px"
-          android:verticalGap="0px" android:keyHeight="45dip">
+    android:horizontalGap="0px"
+    android:verticalGap="0px" android:keyHeight="45dp"
+    android:keyWidth="10%p">
 
-
+    <!-- Row 1: Numbers -->
     <Row>
-        <Key android:codes="-131" android:keyOutputText='১' android:keyLabel="১" android:keyEdgeFlags="left"/>
-        <Key android:codes="-132" android:keyOutputText='২' android:keyLabel="২"/>
-        <Key android:codes="-133" android:keyOutputText='৩' android:keyLabel="৩"/>
-        <Key android:codes="-134" android:keyOutputText='৪' android:keyLabel="৪"/>
-        <Key android:codes="-135" android:keyOutputText='৫' android:keyLabel="৫"/>
-        <Key android:codes="-136" android:keyOutputText='৬' android:keyLabel="৬"/>
-        <Key android:codes="-137" android:keyOutputText='৭' android:keyLabel="৭"/>
-        <Key android:codes="-138" android:keyOutputText='৮' android:keyLabel="৮"/>
-        <Key android:codes="-139" android:keyOutputText='৯' android:keyLabel="৯"/>
-        <Key android:codes="-130" android:keyOutputText='০' android:keyLabel="০" android:keyEdgeFlags="right"/>
+        <Key android:codes="-131" android:keyOutputText="১" android:keyLabel="১" android:keyEdgeFlags="left"/>
+        <Key android:codes="-132" android:keyOutputText="২" android:keyLabel="২"/>
+        <Key android:codes="-133" android:keyOutputText="৩" android:keyLabel="৩"/>
+        <Key android:codes="-134" android:keyOutputText="৪" android:keyLabel="৪"/>
+        <Key android:codes="-135" android:keyOutputText="৫" android:keyLabel="৫"/>
+        <Key android:codes="-136" android:keyOutputText="৬" android:keyLabel="৬"/>
+        <Key android:codes="-137" android:keyOutputText="৭" android:keyLabel="৭"/>
+        <Key android:codes="-138" android:keyOutputText="৮" android:keyLabel="৮"/>
+        <Key android:codes="-139" android:keyOutputText="৯" android:keyLabel="৯"/>
+        <Key android:codes="-130" android:keyOutputText="০" android:keyLabel="০" android:keyEdgeFlags="right"/>
     </Row>
 
-
-
+    <!-- Row 2 -->
     <Row>
-        <Key android:codes="-188" android:keyOutputText='ধ' android:keyLabel="ধ" android:keyEdgeFlags="left"/>
-        <Key android:codes="-145" android:keyOutputText='ঊ' android:keyLabel="ঊ"/>
-        <Key android:codes="-143" android:keyOutputText='ঈ' android:keyLabel="ঈ"/>
-        <Key android:codes="-182" android:keyOutputText='ড' android:keyLabel="ড"/>
-        <Key android:codes="-181" android:keyOutputText='ঠ' android:keyLabel="ঠ"/>
-        <Key android:codes="-148" android:keyOutputText='ঐ' android:keyLabel="ঐ"/>
-        <Key android:codes="-144" android:keyOutputText='উ' android:keyLabel="উ"/>
-        <Key android:codes="-142" android:keyOutputText='ই' android:keyLabel="ই"/>
-        <Key android:codes="-150" android:keyOutputText='ঔ' android:keyLabel="ঔ"/>
-        <Key android:codes="-191" android:keyOutputText='ফ' android:keyLabel="ফ"/>
-        <Key android:codes="-167" android:keyOutputText='ৈ' android:keyLabel="ৈ"/>
-        <Key android:codes="-169" android:keyOutputText='ৌ' android:keyLabel="ৌ" android:keyEdgeFlags="right"/>
+        <Key android:codes="-188" android:keyOutputText="ধ" android:keyLabel="ধ" android:keyEdgeFlags="left"/>
+        <Key android:codes="-145" android:keyOutputText="ঊ" android:keyLabel="ঊ"/>
+        <Key android:codes="-143" android:keyOutputText="ঈ" android:keyLabel="ঈ"/>
+        <Key android:codes="-182" android:keyOutputText="ড" android:keyLabel="ড"/>
+        <Key android:codes="-181" android:keyOutputText="ঠ" android:keyLabel="ঠ"/>
+        <Key android:codes="-148" android:keyOutputText="ঐ" android:keyLabel="ঐ"/>
+        <Key android:codes="-144" android:keyOutputText="উ" android:keyLabel="উ"/>
+        <Key android:codes="-142" android:keyOutputText="ই" android:keyLabel="ই"/>
+        <Key android:codes="-150" android:keyOutputText="ঔ" android:keyLabel="ঔ"/>
+        <Key android:codes="-191" android:keyOutputText="ফ" android:keyLabel="ফ" android:keyEdgeFlags="right"/>
     </Row>
 
-
-
+    <!-- Row 3 -->
     <Row>
-        <Key android:codes="-140" android:keyOutputText='অ' android:keyLabel="অ" android:keyEdgeFlags="left"/>
-        <Key android:codes="-199" android:keyOutputText='ষ' android:keyLabel="ষ"/>
-        <Key android:codes="-183" android:keyOutputText='ঢ' android:keyLabel="ঢ"/>
-        <Key android:codes="-186" android:keyOutputText='থ' android:keyLabel="থ"/>
-        <Key android:codes="-173" android:keyOutputText='ঘ' android:keyLabel="ঘ"/>
-        <Key android:codes="-207" android:keyOutputText='ঃ' android:keyLabel="ঃ"/>
-        <Key android:codes="-178" android:keyOutputText='ঝ' android:keyLabel="ঝ"/>
-        <Key android:codes="-171" android:keyOutputText='খ' android:keyLabel="খ"/>
-        <Key android:codes="-206" android:keyOutputText='ং' android:keyLabel="ং" android:keyEdgeFlags="right"/>
+        <Key android:codes="-140" android:keyOutputText="অ" android:keyLabel="অ" android:keyEdgeFlags="left"/>
+        <Key android:codes="-199" android:keyOutputText="ষ" android:keyLabel="ষ"/>
+        <Key android:codes="-183" android:keyOutputText="ঢ" android:keyLabel="ঢ"/>
+        <Key android:codes="-186" android:keyOutputText="থ" android:keyLabel="থ"/>
+        <Key android:codes="-173" android:keyOutputText="ঘ" android:keyLabel="ঘ"/>
+        <Key android:codes="-207" android:keyOutputText="ঃ" android:keyLabel="ঃ"/>
+        <Key android:codes="-178" android:keyOutputText="ঝ" android:keyLabel="ঝ"/>
+        <Key android:codes="-171" android:keyOutputText="খ" android:keyLabel="খ"/>
+        <Key android:codes="-206" android:keyOutputText="ং" android:keyLabel="ং" android:keyEdgeFlags="right"/>
     </Row>
 
-
-
+    <!-- Row 4 -->
     <Row>
-        <Key android:codes="-195" android:keyOutputText='য' android:keyLabel="য" android:keyEdgeFlags="left"/>
-        <Key android:codes="-203" android:keyOutputText='ঢ়' android:keyLabel="ঢ়"/>
-        <Key android:codes="-176" android:keyOutputText='ছ' android:keyLabel="ছ"/>
-        <Key android:codes="-146" android:keyOutputText='ঋ' android:keyLabel="ঋ"/>
-        <Key android:codes="-193" android:keyOutputText='ভ' android:keyLabel="ভ"/>
-        <Key android:codes="-184" android:keyOutputText='ণ' android:keyLabel="ণ"/>
-        <Key android:codes="-174" android:keyOutputText='ঙ' android:keyLabel="ঙ"/>
-        <Key android:codes="-165" android:keyOutputText='ৃ' android:keyLabel="ৃ"/>
-        <Key android:codes="-208" android:keyOutputText='ঁ' android:keyLabel="ঁ" android:keyEdgeFlags="right"/>
+        <Key android:codes="-195" android:keyOutputText="য" android:keyLabel="য" android:keyEdgeFlags="left"/>
+        <Key android:codes="-203" android:keyOutputText="ঢ়" android:keyLabel="ঢ়"/>
+        <Key android:codes="-176" android:keyOutputText="ছ" android:keyLabel="ছ"/>
+        <Key android:codes="-146" android:keyOutputText="ঋ" android:keyLabel="ঋ"/>
+        <Key android:codes="-193" android:keyOutputText="ভ" android:keyLabel="ভ"/>
+        <Key android:codes="-184" android:keyOutputText="ণ" android:keyLabel="ণ"/>
+        <Key android:codes="-174" android:keyOutputText="ঙ" android:keyLabel="ঙ"/>
+        <Key android:codes="-165" android:keyOutputText="ৃ" android:keyLabel="ৃ"/>
+        <Key android:codes="-208" android:keyOutputText="ঁ" android:keyLabel="ঁ" android:keyEdgeFlags="right"/>
     </Row>
 
-
-
+    <!-- Row 5: Special Keys -->
     <Row>
-        <Key android:codes="-121" android:keyLabel="⇧" android:keyEdgeFlags="left"/>
-        <Key android:codes="-300" android:keyOutputText=',' android:keyLabel=","/>
-        <Key android:codes="62" android:keyOutputText=' ' android:keyLabel=" "/>
-        <Key android:codes="-301" android:keyOutputText='।' android:keyLabel="।"/>
-        <Key android:codes="-5" android:keyLabel="←" android:isRepeatable="true" android:keyEdgeFlags="right"/>
+        <Key android:codes="-121" android:keyLabel="⇧" android:keyWidth="15%p" android:keyEdgeFlags="left"/>
+        <Key android:codes="-300" android:keyOutputText="," android:keyLabel="," android:keyWidth="10%p"/>
+        <Key android:codes="62" android:keyOutputText=" " android:keyLabel="␣" android:keyWidth="50%p"/>
+        <Key android:codes="-301" android:keyOutputText="।" android:keyLabel="।" android:keyWidth="10%p"/>
+        <Key android:codes="-5" android:keyLabel="⌫" android:isRepeatable="true" android:keyWidth="15%p" android:keyEdgeFlags="right"/>
     </Row>
-
 </Keyboard>
