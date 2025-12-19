@@ -50,6 +50,10 @@ public class UnmuktoKeyboardService
         Keyboard keyboard = new Keyboard(this, R.xml.kbd_bn);
         ukvMain.setKeyboard(keyboard);
         ukvMain.setOnKeyboardActionListener(this);
+        
+        // Enable key preview popup for better UX
+        ukvMain.setPreviewEnabled(true);
+        
         return view;
     }
 
