@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="KeyboardTheme">
+        <item name="android:keyBackground">@drawable/key_selector</item>
+        <item name="android:keyTextColor">@color/key_text</item>
+        <item name="android:keyTextSize">20sp</item>
+        <item name="android:shadowColor">@android:color/transparent</item>
+        <item name="android:shadowRadius">0</item>
+        <item name="android:background">@color/keyboard_background</item>
+        <item name="android:keyPreviewLayout">@layout/key_preview</item>
+    </style>
+</resources>
