@@ -7,4 +7,18 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    
+    <!-- Keyboard Colors - GBoard Style -->
+    <color name="keyboard_background">#E8EAED</color>
+    <color name="keyboard_background_dark">#1F1F1F</color>
+    <color name="key_background">#FFFFFF</color>
+    <color name="key_background_dark">#313235</color>
+    <color name="key_text">#202124</color>
+    <color name="key_text_dark">#E8EAED</color>
+    <color name="key_pressed">#D2E3FC</color>
+    <color name="key_pressed_dark">#494B4F</color>
+    <color name="special_key_background">#D2E3FC</color>
+    <color name="special_key_background_dark">#494B4F</color>
+    <color name="suggestion_background">#F1F3F4</color>
+    <color name="suggestion_background_dark">#292A2D</color>
 </resources>
