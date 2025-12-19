@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Keyboard Colors - Dark Theme -->\n    <color name="keyboard_background">@color/keyboard_background_dark</color>
+    <color name="key_background">@color/key_background_dark</color>
+    <color name="key_text">@color/key_text_dark</color>
+    <color name="key_pressed">@color/key_pressed_dark</color>
+    <color name="special_key_background">@color/special_key_background_dark</color>
+    <color name="suggestion_background">@color/suggestion_background_dark</color>
+</resources>
