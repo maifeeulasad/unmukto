@@ -2,17 +2,36 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/keyboard_background"
+    android:paddingTop="4dp"
+    android:paddingBottom="2dp">
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_suggestions"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="2dp"/>
+        android:layout_height="40dp"
+        android:background="@color/suggestion_background"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:visibility="gone"/>
 
     <com.mua.unmukto.UnmuktoKeyboardView
         android:id="@+id/ukv_main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:paddingStart="4dp"
+        android:paddingEnd="4dp"
+        android:paddingTop="2dp"
+        android:background="@android:color/transparent"
+        android:keyBackground="@drawable/key_selector"
+        android:keyTextColor="@color/key_text"
+        android:keyTextSize="18sp"
+        android:keyPreviewLayout="@layout/key_preview"
+        android:keyPreviewOffset="-12dp"
+        android:shadowColor="@android:color/transparent"
+        android:shadowRadius="0" />
 
 </LinearLayout>
