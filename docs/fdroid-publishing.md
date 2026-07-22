@@ -95,15 +95,15 @@ The tag name must match the `commit:` field in the recipe (`v1.2`) and, because
 `UpdateCheckMode` is `Tags`, every future release has to follow the same `v<versionName>`
 pattern or automatic update detection will silently stop working.
 
-### 3.2 Take screenshots
+### 3.2 Screenshots — done
 
-Not required, but the F-Droid page looks abandoned without them, and the images currently
-linked from the README are from 2021 and show the *old* key rendering — reusing them would
-misrepresent the app. Capture on a device running the current build and drop them in
-`fastlane/metadata/android/en-US/images/phoneScreenshots/` as `1.png`, `2.png`, …
+`fastlane/metadata/android/en-US/images/phoneScreenshots/` now holds `1.jpg` (base layer) and
+`2.jpg` (shifted layer), both captured on a device running the current build at 1080×2340.
+The README points at the same pair on the `gh-pages` branch.
 
-Suggested set: base layer, shifted layer, setup screen, dark mode. Then delete the
-`README.txt` placeholder in that directory.
+Optional additions, if you want a fuller page later: the setup screen on its own and a dark
+mode capture. Keep the numbering sequential (`3.jpg`, `4.jpg`) and stay in PNG or JPEG —
+F-Droid accepts nothing else.
 
 ### 3.3 Verify the build the way F-Droid will
 
