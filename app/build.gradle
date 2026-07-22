@@ -18,8 +18,10 @@ android {
         applicationId "com.mua.unmukto"
         minSdk 21
         targetSdk 35
-        versionCode 2
-        versionName "1.1"
+        // F-Droid extracts these with a regex and matches them against the git tag it
+        // builds from, so they must be literals here -- never computed.
+        versionCode 3
+        versionName "1.2"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
