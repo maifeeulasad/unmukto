@@ -1,0 +1,9 @@
+Adds the Bengali characters that previously had no key: the vowel signs ে, ৈ, ো, ৌ plus ঞ, ড় and ৎ. All 61 letters, vowel signs and marks are now reachable, and a ? key was added.
+
+Characters used to be inserted the moment a finger touched a key, so sliding off to cancel still typed them. Fixed. Shift is now one-shot rather than latched.
+
+Redesigned keys, modifiers styled apart from letters, proper dark mode.
+
+Launching the app no longer jumps to system settings.
+
+First GPL v3 release.

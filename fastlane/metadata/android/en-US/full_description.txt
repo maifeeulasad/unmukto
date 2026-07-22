@@ -1,0 +1,14 @@
+উন্মুক্ত (Unmukto) is a Bengali keyboard for Android, built around the Probhat layout.
+
+It is deliberately small. The keyboard declares no Android permissions at all, has no network access, and contains no analytics, advertising or tracking libraries. Nothing you type leaves your device, because the app has no way to send it anywhere.
+
+Features:
+
+* Full Probhat layout across two layers, covering all Bengali letters, vowel signs and diacritical marks
+* Bengali numerals
+* Shift layer for aspirated consonants, long vowels and the less common letters
+* Light and dark themes that follow your system setting
+* Key preview popups
+* No permissions, no network, no telemetry
+
+Unmukto is free software, released under the GNU General Public License v3 or later. Source code, issue tracker and build instructions are on GitHub.

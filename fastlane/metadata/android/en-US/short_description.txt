@@ -1,0 +1,1 @@
+An offline Bengali keyboard using the Probhat layout. No permissions.
