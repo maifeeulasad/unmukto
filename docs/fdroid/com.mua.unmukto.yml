@@ -1,0 +1,41 @@
+# F-Droid build recipe for Unmukto.
+#
+# This file does NOT belong to this repository as far as F-Droid is concerned.
+# It is kept here so the packaging recipe is versioned alongside the source it
+# builds. To submit or update the app, copy it to
+#
+#     metadata/com.mua.unmukto.yml
+#
+# in a fork of https://gitlab.com/fdroid/fdroiddata and open a merge request
+# there. See ../fdroid-publishing.md for the full process.
+
+Categories:
+  - System
+License: GPL-3.0-or-later
+AuthorName: Maifee Ul Asad
+SourceCode: https://github.com/maifeeulasad/unmukto
+IssueTracker: https://github.com/maifeeulasad/unmukto/issues
+Changelog: https://github.com/maifeeulasad/unmukto/releases
+
+# Summary and Description are intentionally omitted: F-Droid prefers the
+# fastlane/ tree in the upstream repository, which this app ships, and having
+# both means they drift apart.
+
+RepoType: git
+Repo: https://github.com/maifeeulasad/unmukto.git
+
+Builds:
+  - versionName: '1.2'
+    versionCode: 3
+    commit: v1.2
+    subdir: app
+    gradle:
+      - yes
+
+# Tags is correct here because every release is tagged v<versionName> and the
+# version literals live in app/build.gradle, where F-Droid's regex can find
+# them.
+AutoUpdateMode: Version v%v
+UpdateCheckMode: Tags
+CurrentVersion: '1.2'
+CurrentVersionCode: 3
