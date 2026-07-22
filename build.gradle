@@ -1,12 +1,7 @@
-// Top-level build file. Repositories live in settings.gradle under
-// dependencyResolutionManagement, which is where AGP 8 expects them.
-buildscript {
-    ext.kotlin_version = '1.9.24'
-    dependencies {
-        classpath 'com.android.tools.build:gradle:8.13.0'
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-
-        // NOTE: Do not place your application dependencies here; they belong
-        // in the individual module build.gradle files
-    }
+// Top-level build file. Plugin versions are declared once here and applied in the modules
+// that need them; the repositories they resolve from live in settings.gradle under
+// pluginManagement.
+plugins {
+    id 'com.android.application' version '8.13.0' apply false
+    id 'org.jetbrains.kotlin.android' version '1.9.24' apply false
 }
