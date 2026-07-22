@@ -1,22 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:fillViewport="true"
     tools:context=".MainActivity">
 
-    <EditText
-        android:id="@+id/et_test"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:autofillHints="Test Unmukto here"
-        android:inputType="text" />
+        android:orientation="vertical"
+        android:padding="24dp">
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/setup_title"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="?android:attr/textColorPrimary"/>
 
-    <com.mua.unmukto.UnmuktoKeyboardView
-        android:id="@+id/ukv_test"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/setup_subtitle"
+            android:textSize="15sp"
+            android:textColor="?android:attr/textColorSecondary"/>
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/tv_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/status_background"
+            android:padding="16dp"
+            android:textSize="15sp"
+            android:textColor="?android:attr/textColorPrimary"
+            tools:text="@string/status_not_enabled"/>
+
+        <Button
+            android:id="@+id/btn_enable"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="@string/action_enable"/>
+
+        <Button
+            android:id="@+id/btn_switch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/action_switch"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
+            android:text="@string/test_heading"
+            android:textSize="13sp"
+            android:textAllCaps="true"
+            android:textColor="?android:attr/textColorSecondary"/>
+
+        <EditText
+            android:id="@+id/et_test"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:hint="@string/test_hint"
+            android:autofillHints="@string/test_hint"
+            android:inputType="textMultiLine"
+            android:minLines="3"
+            android:gravity="top|start"
+            android:textSize="18sp"/>
+
+    </LinearLayout>
+
+</ScrollView>

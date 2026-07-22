@@ -21,4 +21,8 @@
     <color name="special_key_background_dark">#494B4F</color>
     <color name="suggestion_background">#F1F3F4</color>
     <color name="suggestion_background_dark">#292A2D</color>
+
+    <!-- Setup screen -->
+    <color name="status_background">#F1F3F4</color>
+    <color name="status_background_dark">#292A2D</color>
 </resources>

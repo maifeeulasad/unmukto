@@ -2,85 +2,72 @@ package com.mua.unmukto
 
 import android.content.Context
 import android.content.Intent
-import android.inputmethodservice.Keyboard
-import android.inputmethodservice.KeyboardView.OnKeyboardActionListener
 import android.os.Bundle
 import android.provider.Settings
 import android.view.inputmethod.InputMethodManager
-import android.widget.EditText
+import android.widget.Button
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
+/**
+ * Setup screen for the keyboard. Enabling an IME and selecting it are both actions only the
+ * user can take, from system UI, so this screen reports where they are in that process and
+ * offers the two jumps rather than performing them.
+ */
+class MainActivity : AppCompatActivity() {
 
-class MainActivity : AppCompatActivity(), OnKeyboardActionListener {
+    private lateinit var tvStatus: TextView
+    private lateinit var btnEnable: Button
+    private lateinit var btnSwitch: Button
 
-    private lateinit var ukvTest: UnmuktoKeyboardView
-    private lateinit var etTest: EditText
-
-    private val UNMUKTO_SIGNATURE = "com.mua.unmukto/.UnmuktoKeyboardService"
+    private val imm: InputMethodManager
+        get() = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        ukvTest = findViewById(R.id.ukv_test)
-        etTest = findViewById(R.id.et_test)
+        tvStatus = findViewById(R.id.tv_status)
+        btnEnable = findViewById(R.id.btn_enable)
+        btnSwitch = findViewById(R.id.btn_switch)
 
-        val mKeyboard = Keyboard(this, R.xml.kbd_bn)
-        ukvTest.setKeyboard(mKeyboard)
-        ukvTest.setOnKeyboardActionListener(this)
-
-        showSettings()
-    }
-
-    fun showSettings(){
-        if(!checkIsUnmukto()){
-            addKeyboard()
-            setDefault()
+        btnEnable.setOnClickListener {
+            startActivity(Intent(Settings.ACTION_INPUT_METHOD_SETTINGS))
+        }
+        btnSwitch.setOnClickListener {
+            imm.showInputMethodPicker()
         }
     }
 
-    fun setDefault(){
-        val imeManager = applicationContext.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-        imeManager.showInputMethodPicker()
+    override fun onResume() {
+        super.onResume()
+        refreshStatus()
     }
 
-    fun addKeyboard(){
-        val enableIntent = Intent(Settings.ACTION_INPUT_METHOD_SETTINGS)
-        enableIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
-        this.startActivity(enableIntent)
+    private fun refreshStatus() {
+        val enabled = isEnabled()
+        val selected = isSelected()
+
+        tvStatus.setText(
+            when {
+                selected -> R.string.status_ready
+                enabled -> R.string.status_enabled_not_selected
+                else -> R.string.status_not_enabled
+            }
+        )
+        btnEnable.isEnabled = !enabled
+        btnSwitch.isEnabled = enabled && !selected
     }
 
-    fun checkIsUnmukto():Boolean{
-        return Settings.Secure.getString(contentResolver, Settings.Secure.DEFAULT_INPUT_METHOD).equals(UNMUKTO_SIGNATURE)
-    }
+    /** True once the user has ticked Unmukto in the system's input method settings. */
+    private fun isEnabled(): Boolean =
+        imm.enabledInputMethodList.any { it.packageName == packageName }
 
-    override fun onPress(primaryCode: Int) {
-    }
-
-    override fun onRelease(primaryCode: Int) {
-    }
-
-    override fun onKey(primaryCode: Int, keyCodes: IntArray) {
-        if (primaryCode == -120) {
-            ukvTest.keyboard = Keyboard(this, R.xml.kbd_bn_shifted)
-        } else if (primaryCode == -121) {
-            ukvTest.keyboard = Keyboard(this, R.xml.kbd_bn)
-        }
-    }
-
-    override fun onText(text: CharSequence) {
-        etTest.setText(etTest!!.text.toString() + text.toString())
-    }
-
-    override fun swipeLeft() {
-    }
-
-    override fun swipeRight() {
-    }
-
-    override fun swipeDown() {
-    }
-
-    override fun swipeUp() {
+    /** True once Unmukto is the keyboard the system will actually bring up. */
+    private fun isSelected(): Boolean {
+        val current = Settings.Secure.getString(
+            contentResolver, Settings.Secure.DEFAULT_INPUT_METHOD
+        )
+        return current != null && current.startsWith("$packageName/")
     }
 }
