@@ -21,11 +21,11 @@ import androidx.core.content.ContextCompat
  * cell stays the full touch target while the visible key is inset inside it, and each key
  * can be styled by role.
  */
-class UnmuktoKeyboardView @JvmOverloads constructor(
-    context: Context,
-    attrs: AttributeSet? = null,
-    defStyleAttr: Int = 0
-) : KeyboardView(context, attrs, defStyleAttr) {
+// Deliberately delegates to KeyboardView's two-argument constructor rather than passing a
+// defStyleAttr of 0: the two-argument form applies the platform's keyboardViewStyle, which
+// is where preview offsets, vertical touch correction and the popup layout get their
+// defaults. Passing 0 silently drops all of them.
+class UnmuktoKeyboardView(context: Context, attrs: AttributeSet?) : KeyboardView(context, attrs) {
 
     private companion object {
         /** Keys that act on the keyboard rather than emitting text. */
