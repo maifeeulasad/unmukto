@@ -1,8 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <input-method
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:settingsActivity="com.mua.unmukto.MainActivity"
+    android:supportsSwitchingToNextInputMethod="true">
 
     <subtype
-        android:imeSubtypeMode="keyboard"/>
+        android:label="@string/subtype_label_bn"
+        android:imeSubtypeLocale="bn_BD"
+        android:languageTag="bn-BD"
+        android:imeSubtypeMode="keyboard"
+        android:isAsciiCapable="false"/>
 
 </input-method>
