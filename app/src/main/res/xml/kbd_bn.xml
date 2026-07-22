@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Base (unshifted) Probhat layer.
+
+    horizontalGap is 0 because Keyboard adds the gap *after* each key when laying a row
+    out, so 10 keys at 10%p plus any gap overflows the row and clips the rightmost key.
+    The visual spacing between keys is drawn as an inset by UnmuktoKeyboardView instead,
+    which also keeps the touch target the full width of the cell.
+-->
 <Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
-    android:horizontalGap="2dp"
-    android:verticalGap="4dp"
-    android:keyHeight="48dp"
+    android:horizontalGap="0dp"
+    android:verticalGap="0dp"
+    android:keyHeight="52dp"
     android:keyWidth="10%p">
 
     <!-- Row 1: Numbers -->
@@ -43,12 +51,13 @@
         <Key android:codes="-201" android:keyOutputText="হ" android:keyLabel="হ"/>
         <Key android:codes="-177" android:keyOutputText="জ" android:keyLabel="জ"/>
         <Key android:codes="-170" android:keyOutputText="ক" android:keyLabel="ক"/>
-        <Key android:codes="-197" android:keyOutputText="ল" android:keyLabel="ল" android:keyEdgeFlags="right"/>
+        <Key android:codes="-197" android:keyOutputText="ল" android:keyLabel="ল"/>
+        <Key android:codes="-166" android:keyOutputText="ে" android:keyLabel="ে" android:keyEdgeFlags="right"/>
     </Row>
 
     <!-- Row 4 -->
     <Row>
-        <Key android:codes="-204" android:keyOutputText="য়" android:keyLabel="য়" android:keyEdgeFlags="left"/>
+        <Key android:codes="-204" android:keyOutputText="য়" android:keyLabel="য়" android:keyEdgeFlags="left"/>
         <Key android:codes="-198" android:keyOutputText="শ" android:keyLabel="শ"/>
         <Key android:codes="-175" android:keyOutputText="চ" android:keyLabel="চ"/>
         <Key android:codes="-141" android:keyOutputText="আ" android:keyLabel="আ"/>
@@ -56,7 +65,8 @@
         <Key android:codes="-189" android:keyOutputText="ন" android:keyLabel="ন"/>
         <Key android:codes="-194" android:keyOutputText="ম" android:keyLabel="ম"/>
         <Key android:codes="-165" android:keyOutputText="ৃ" android:keyLabel="ৃ"/>
-        <Key android:codes="-210" android:keyOutputText="্" android:keyLabel="্" android:keyEdgeFlags="right"/>
+        <Key android:codes="-210" android:keyOutputText="্" android:keyLabel="্"/>
+        <Key android:codes="-168" android:keyOutputText="ো" android:keyLabel="ো" android:keyEdgeFlags="right"/>
     </Row>
 
     <!-- Row 5: Special Keys -->

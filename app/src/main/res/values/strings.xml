@@ -1,3 +1,18 @@
 <resources>
     <string name="app_name">Unmukto</string>
+    <string name="ime_label">Unmukto Keyboard</string>
+    <string name="subtype_label_bn">বাংলা (প্রভাত)</string>
+
+    <string name="setup_title">উন্মুক্ত</string>
+    <string name="setup_subtitle">A Bengali keyboard, Probhat layout</string>
+
+    <string name="status_not_enabled">Unmukto is not enabled yet. Turn it on in the system keyboard settings, then come back.</string>
+    <string name="status_enabled_not_selected">Unmukto is enabled. Switch to it to start typing in Bengali.</string>
+    <string name="status_ready">Unmukto is your active keyboard. Try it out below.</string>
+
+    <string name="action_enable">Enable in keyboard settings</string>
+    <string name="action_switch">Switch to Unmukto</string>
+
+    <string name="test_heading">Try it</string>
+    <string name="test_hint">Type something in Bengali…</string>
 </resources>
