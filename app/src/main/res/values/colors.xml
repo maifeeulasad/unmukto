@@ -1,28 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Light palette. Every name here has a counterpart in values-night/colors.xml, so nothing
+    that ends up on screen should reference a raw hex value outside these two files.
+-->
 <resources>
-    <color name="purple_200">#FFBB86FC</color>
-    <color name="purple_500">#FF6200EE</color>
-    <color name="purple_700">#FF3700B3</color>
-    <color name="teal_200">#FF03DAC5</color>
-    <color name="teal_700">#FF018786</color>
-    <color name="black">#FF000000</color>
+
+    <!-- Brand -->
+    <color name="brand_primary">#006A4E</color>
+    <color name="brand_primary_dark">#00513B</color>
+    <color name="brand_accent">#F42A41</color>
+    <color name="brand_on_primary">#FFFFFF</color>
     <color name="white">#FFFFFFFF</color>
-    
-    <!-- Keyboard Colors - GBoard Style -->
-    <color name="keyboard_background">#E8EAED</color>
-    <color name="keyboard_background_dark">#1F1F1F</color>
-    <color name="key_background">#FFFFFF</color>
-    <color name="key_background_dark">#313235</color>
-    <color name="key_text">#202124</color>
-    <color name="key_text_dark">#E8EAED</color>
-    <color name="key_pressed">#D2E3FC</color>
-    <color name="key_pressed_dark">#494B4F</color>
-    <color name="special_key_background">#D2E3FC</color>
-    <color name="special_key_background_dark">#494B4F</color>
-    <color name="suggestion_background">#F1F3F4</color>
-    <color name="suggestion_background_dark">#292A2D</color>
+    <color name="black">#FF000000</color>
+
+    <!-- Keyboard surfaces -->
+    <color name="keyboard_background">#EDEFF2</color>
+    <color name="key_surface">#FFFFFF</color>
+    <color name="key_surface_modifier">#DCE0E6</color>
+    <color name="key_surface_pressed">#B9D4C9</color>
+    <color name="key_stroke">#1F000000</color>
+    <color name="key_shadow">#14000000</color>
+
+    <!-- Keyboard text -->
+    <color name="key_text">#1B1C1E</color>
+    <color name="key_text_modifier">#3C4043</color>
+
+    <!-- Key preview popup -->
+    <color name="key_preview_surface">#FFFFFF</color>
+    <color name="key_preview_text">#1B1C1E</color>
 
     <!-- Setup screen -->
     <color name="status_background">#F1F3F4</color>
-    <color name="status_background_dark">#292A2D</color>
+
 </resources>

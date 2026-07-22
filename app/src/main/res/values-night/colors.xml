@@ -1,9 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    Dark palette. Mirrors every name in values/colors.xml.
+-->
 <resources>
-    <!-- Keyboard Colors - Dark Theme -->\n    <color name="keyboard_background">@color/keyboard_background_dark</color>
-    <color name="key_background">@color/key_background_dark</color>
-    <color name="key_text">@color/key_text_dark</color>
-    <color name="key_pressed">@color/key_pressed_dark</color>
-    <color name="special_key_background">@color/special_key_background_dark</color>
-    <color name="suggestion_background">@color/suggestion_background_dark</color>
+
+    <!-- Brand -->
+    <color name="brand_primary">#4CAF8F</color>
+    <color name="brand_primary_dark">#006A4E</color>
+    <color name="brand_accent">#FF6B7E</color>
+    <!-- Dark text reads better than white on the lighter dark-mode green. -->
+    <color name="brand_on_primary">#06231A</color>
+
+    <!-- Keyboard surfaces -->
+    <color name="keyboard_background">#141517</color>
+    <color name="key_surface">#2C2E33</color>
+    <color name="key_surface_modifier">#1F2125</color>
+    <color name="key_surface_pressed">#3E5C51</color>
+    <color name="key_stroke">#1FFFFFFF</color>
+    <color name="key_shadow">#33000000</color>
+
+    <!-- Keyboard text -->
+    <color name="key_text">#ECEDEF</color>
+    <color name="key_text_modifier">#B9BDC4</color>
+
+    <!-- Key preview popup -->
+    <color name="key_preview_surface">#3A3D43</color>
+    <color name="key_preview_text">#ECEDEF</color>
+
+    <!-- Setup screen -->
+    <color name="status_background">#25272B</color>
+
 </resources>
