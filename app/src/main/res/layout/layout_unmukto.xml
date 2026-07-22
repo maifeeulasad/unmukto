@@ -12,14 +12,6 @@
     android:paddingTop="6dp"
     android:paddingBottom="8dp">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rv_suggestions"
-        android:layout_width="match_parent"
-        android:layout_height="40dp"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
-        android:visibility="gone"/>
-
     <com.mua.unmukto.UnmuktoKeyboardView
         android:id="@+id/ukv_main"
         android:layout_width="match_parent"

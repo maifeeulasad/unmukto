@@ -9,9 +9,6 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 public class UnmuktoKeyboardService
         extends InputMethodService
         implements KeyboardView.OnKeyboardActionListener {
@@ -20,7 +17,6 @@ public class UnmuktoKeyboardService
     static final int KEYCODE_SHIFT_OFF = -121;
 
     private KeyboardView ukvMain;
-    private RecyclerView rvSuggestions;
 
     private Keyboard baseKeyboard;
     private Keyboard shiftedKeyboard;
@@ -30,10 +26,6 @@ public class UnmuktoKeyboardService
     public View onCreateInputView() {
         View view = getLayoutInflater().inflate(R.layout.layout_unmukto, null, false);
         ukvMain = view.findViewById(R.id.ukv_main);
-        rvSuggestions = view.findViewById(R.id.rv_suggestions);
-        LinearLayoutManager linearLayoutManager
-                = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
-        rvSuggestions.setLayoutManager(linearLayoutManager);
 
         // Both layers are inflated once and reused; re-parsing the layout XML on every
         // shift press is wasted work on the input path.
