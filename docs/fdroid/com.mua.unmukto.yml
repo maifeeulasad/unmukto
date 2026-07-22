@@ -10,6 +10,7 @@
 # there. See ../fdroid-publishing.md for the full process.
 
 Categories:
+  - Keyboard & IME
   - System
 License: GPL-3.0-or-later
 AuthorName: Maifee Ul Asad
@@ -32,10 +33,19 @@ Builds:
     gradle:
       - yes
 
-# Tags is correct here because every release is tagged v<versionName> and the
-# version literals live in app/build.gradle, where F-Droid's regex can find
-# them.
-AutoUpdateMode: Version v%v
-UpdateCheckMode: Tags
+# Tags rather than HTTP because every release is tagged and the version
+# literals live in app/build.gradle, where F-Droid's regex finds them without
+# needing UpdateCheckData.
+#
+# The ^v[\d.]+$ filter matters: the repository still carries the 2021 beta tag
+# v0.0.1b, and without the pattern it is a candidate release. The trailing
+# letter fails the match, so only tags like v1.2 are considered.
+#
+# AutoUpdateMode is bare "Version" -- with Tags mode F-Droid already knows the
+# tag it matched and uses it as the commit directly. A "Version v%v" pattern is
+# for constructing a tag name that was never discovered, which is an HTTP-mode
+# problem.
+AutoUpdateMode: Version
+UpdateCheckMode: Tags ^v[\d.]+$
 CurrentVersion: '1.2'
 CurrentVersionCode: 3

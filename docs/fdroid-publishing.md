@@ -91,9 +91,11 @@ git tag -a v1.2 -m "Unmukto 1.2"
 git push origin v1.2
 ```
 
-The tag name must match the `commit:` field in the recipe (`v1.2`) and, because
-`UpdateCheckMode` is `Tags`, every future release has to follow the same `v<versionName>`
-pattern or automatic update detection will silently stop working.
+The tag name must match the `commit:` field in the recipe (`v1.2`). The recipe filters tags
+with `^v[\d.]+$`, so every future release has to keep the `v<versionName>` shape — a tag like
+`1.2` or `v1.3-beta` will not be seen, and update detection stops silently rather than
+erroring. That filter is deliberate: it is also what keeps the 2021 `v0.0.1b` tag from being
+treated as a release candidate.
 
 ### 3.2 Screenshots — done
 
@@ -155,9 +157,9 @@ Once the app is in `fdroiddata`, each release is:
    the version code exactly, no padding, no `v`
 3. Tag `v<versionName>` and push the tag
 
-Because the recipe sets `AutoUpdateMode: Version v%v` and `UpdateCheckMode: Tags`, F-Droid's
-bot notices the new tag and opens the metadata update itself. You do not normally touch
-`fdroiddata` again after the initial submission.
+Because the recipe sets `AutoUpdateMode: Version` and `UpdateCheckMode: Tags ^v[\d.]+$`,
+F-Droid's bot notices the new tag and opens the metadata update itself. You do not normally
+touch `fdroiddata` again after the initial submission.
 
 ---
 
