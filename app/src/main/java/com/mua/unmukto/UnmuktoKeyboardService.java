@@ -6,6 +6,7 @@ import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -21,6 +22,10 @@ public class UnmuktoKeyboardService
     private KeyboardView ukvMain;
     private RecyclerView rvSuggestions;
 
+    private Keyboard baseKeyboard;
+    private Keyboard shiftedKeyboard;
+    private boolean shifted;
+
     @Override
     public View onCreateInputView() {
         View view = getLayoutInflater().inflate(R.layout.layout_unmukto, null, false);
@@ -29,14 +34,37 @@ public class UnmuktoKeyboardService
         LinearLayoutManager linearLayoutManager
                 = new LinearLayoutManager(getApplicationContext(), LinearLayoutManager.HORIZONTAL, false);
         rvSuggestions.setLayoutManager(linearLayoutManager);
-        Keyboard keyboard = new Keyboard(this, R.xml.kbd_bn);
-        ukvMain.setKeyboard(keyboard);
+
+        // Both layers are inflated once and reused; re-parsing the layout XML on every
+        // shift press is wasted work on the input path.
+        baseKeyboard = new Keyboard(this, R.xml.kbd_bn);
+        shiftedKeyboard = new Keyboard(this, R.xml.kbd_bn_shifted);
+
+        shifted = false;
+        ukvMain.setKeyboard(baseKeyboard);
         ukvMain.setOnKeyboardActionListener(this);
 
         // Enable key preview popup for better UX
         ukvMain.setPreviewEnabled(true);
 
         return view;
+    }
+
+    /**
+     * The input view is reused across every field in every app, so a layer left shifted by
+     * the last session would otherwise carry over into the next one.
+     */
+    @Override
+    public void onStartInputView(EditorInfo info, boolean restarting) {
+        super.onStartInputView(info, restarting);
+        setShifted(false);
+    }
+
+    private void setShifted(boolean shift) {
+        if (ukvMain == null || shifted == shift)
+            return;
+        shifted = shift;
+        ukvMain.setKeyboard(shift ? shiftedKeyboard : baseKeyboard);
     }
 
     /**
@@ -51,6 +79,9 @@ public class UnmuktoKeyboardService
         if (ic == null)
             return;
         ic.commitText(text, 1);
+        // Shift is one-shot, as on every other soft keyboard: the shifted layer holds
+        // individual letters you reach for mid-word, not a run of them.
+        setShifted(false);
     }
 
     /**
@@ -63,9 +94,9 @@ public class UnmuktoKeyboardService
         if (ic == null)
             return;
         if (primaryCode == KEYCODE_SHIFT_ON) {
-            ukvMain.setKeyboard(new Keyboard(this, R.xml.kbd_bn_shifted));
+            setShifted(true);
         } else if (primaryCode == KEYCODE_SHIFT_OFF) {
-            ukvMain.setKeyboard(new Keyboard(this, R.xml.kbd_bn));
+            setShifted(false);
         } else if (primaryCode == Keyboard.KEYCODE_DELETE) {
             handleDelete(ic);
         } else if (primaryCode > 0) {
