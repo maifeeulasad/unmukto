@@ -46,8 +46,14 @@ import com.mua.unmukto.keyboard.KeyCodes
 class UnmuktoKeyboardView(context: Context, attrs: AttributeSet?) : KeyboardView(context, attrs) {
 
     private companion object {
-        /** Labels longer than this are words, not glyphs, and need a smaller size to fit. */
-        const val GLYPH_LABEL_MAX_LENGTH = 2
+        /**
+         * Labels longer than this are words, not glyphs, and need a smaller size to fit.
+         *
+         * Counted in code points rather than chars: য় and ড় are two code points each, and
+         * so is anything outside the basic plane, which would otherwise be measured as
+         * twice its length and shrunk to word size.
+         */
+        const val GLYPH_LABEL_MAX_CODE_POINTS = 2
     }
 
     private val backgroundFill = color(R.color.keyboard_background)
@@ -65,6 +71,9 @@ class UnmuktoKeyboardView(context: Context, attrs: AttributeSet?) : KeyboardView
 
     private val glyphTextSize = sp(21f)
     private val wordTextSize = sp(14f)
+    // Emoji carry their detail in the glyph rather than in a letterform, so they are drawn
+    // larger than a letter on the same key would be.
+    private val emojiTextSize = sp(26f)
 
     private val fillPaint = Paint(Paint.ANTI_ALIAS_FLAG)
     private val labelPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -126,14 +135,22 @@ class UnmuktoKeyboardView(context: Context, attrs: AttributeSet?) : KeyboardView
 
         val label = key.label ?: return
         labelPaint.color = if (modifier) modifierTextFill else textFill
-        labelPaint.textSize =
-            if (label.length > GLYPH_LABEL_MAX_LENGTH) wordTextSize else glyphTextSize
+        labelPaint.textSize = textSizeFor(label)
 
         // Centre on the cap box rather than the layout box, so glyphs sit optically centred
         // whether or not they carry ascenders or below-baseline marks.
         val metrics = labelPaint.fontMetrics
         val baseline = keyRect.centerY() - (metrics.ascent + metrics.descent) / 2f
         canvas.drawText(label.toString(), keyRect.centerX(), baseline, labelPaint)
+    }
+
+    private fun textSizeFor(label: CharSequence): Float {
+        val codePoints = Character.codePointCount(label, 0, label.length)
+        // A single code point above the basic plane is an emoji rather than a letter; every
+        // script this keyboard types lives below it.
+        if (codePoints == 1 && Character.isSupplementaryCodePoint(Character.codePointAt(label, 0)))
+            return emojiTextSize
+        return if (codePoints > GLYPH_LABEL_MAX_CODE_POINTS) wordTextSize else glyphTextSize
     }
 
     override fun onLongPress(popupKey: Keyboard.Key): Boolean {
