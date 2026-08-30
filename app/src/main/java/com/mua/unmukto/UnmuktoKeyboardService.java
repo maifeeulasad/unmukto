@@ -107,16 +107,25 @@ public class UnmuktoKeyboardService
      */
     @Override
     public void onKey(int primaryCode, int[] keyCodes) {
+        // These act on the keyboard itself, so they are handled before the input connection
+        // is looked at: a field that has gone away must not take the way out with it.
+        if (primaryCode == KEYCODE_SHIFT_ON) {
+            setShifted(true);
+            return;
+        }
+        if (primaryCode == KEYCODE_SHIFT_OFF) {
+            setShifted(false);
+            return;
+        }
+        if (primaryCode == KEYCODE_SWITCH_IME) {
+            switchToNextKeyboard();
+            return;
+        }
+
         InputConnection ic = getCurrentInputConnection();
         if (ic == null)
             return;
-        if (primaryCode == KEYCODE_SHIFT_ON) {
-            setShifted(true);
-        } else if (primaryCode == KEYCODE_SHIFT_OFF) {
-            setShifted(false);
-        } else if (primaryCode == KEYCODE_SWITCH_IME) {
-            switchToNextKeyboard();
-        } else if (primaryCode == Keyboard.KEYCODE_DELETE) {
+        if (primaryCode == Keyboard.KEYCODE_DELETE) {
             handleDelete(ic);
         } else if (primaryCode > 0) {
             ic.commitText(String.valueOf((char) primaryCode), 1);
