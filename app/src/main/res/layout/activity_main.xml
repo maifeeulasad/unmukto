@@ -57,6 +57,24 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
+            android:text="@string/layout_heading"
+            android:textSize="13sp"
+            android:textAllCaps="true"
+            android:textColor="?android:attr/textColorSecondary"/>
+
+        <!-- Filled in from the layout catalogue rather than declared here, so a layout is
+             added in one place and shows up in every place that lists them. -->
+        <RadioGroup
+            android:id="@+id/rg_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:orientation="vertical"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="32dp"
             android:text="@string/test_heading"
             android:textSize="13sp"
             android:textAllCaps="true"
