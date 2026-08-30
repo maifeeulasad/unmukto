@@ -74,6 +74,9 @@ class EmojiPanelView @JvmOverloads constructor(
 
     private var catalog: EmojiCatalog = UnicodeEmojiCatalog
 
+    /** The category to fill the grid with once there is a reason to fill it. */
+    private var pendingCategory = 0
+
     // Declared before init, which reaches them through bind(): a property below an init
     // block is still zero while that block runs.
     private val selectedTabFill = ContextCompat.getColor(context, R.color.key_surface)
