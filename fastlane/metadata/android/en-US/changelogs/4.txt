@@ -1,0 +1,7 @@
+Emoji, at last: a scrolling panel with every emoji your phone can draw, reached from the new key beside the space bar.
+
+A second layout in Bengali alphabetical order, each vowel sign sitting under its own vowel. Hold the space bar to switch layouts, or pick one in the app.
+
+A key to switch straight back to another keyboard, so Unmukto is no longer a one-way door.
+
+Backspace now deletes a whole emoji instead of half of one.
