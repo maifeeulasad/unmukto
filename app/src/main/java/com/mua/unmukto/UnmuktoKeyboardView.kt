@@ -27,6 +27,7 @@ import android.util.AttributeSet
 import android.util.TypedValue
 import android.view.MotionEvent
 import androidx.core.content.ContextCompat
+import com.mua.unmukto.keyboard.KeyCodes
 
 /**
  * Draws the keyboard itself rather than leaning on [KeyboardView]'s stock rendering.
@@ -45,14 +46,6 @@ import androidx.core.content.ContextCompat
 class UnmuktoKeyboardView(context: Context, attrs: AttributeSet?) : KeyboardView(context, attrs) {
 
     private companion object {
-        /** Keys that act on the keyboard rather than emitting text. */
-        val MODIFIER_CODES = setOf(
-            UnmuktoKeyboardService.KEYCODE_SHIFT_ON,
-            UnmuktoKeyboardService.KEYCODE_SHIFT_OFF,
-            UnmuktoKeyboardService.KEYCODE_SWITCH_IME,
-            Keyboard.KEYCODE_DELETE
-        )
-
         /** Labels longer than this are words, not glyphs, and need a smaller size to fit. */
         const val GLYPH_LABEL_MAX_LENGTH = 2
     }
@@ -113,7 +106,7 @@ class UnmuktoKeyboardView(context: Context, attrs: AttributeSet?) : KeyboardView
             key.y + key.height - insetY
         )
 
-        val modifier = key.codes.isNotEmpty() && key.codes[0] in MODIFIER_CODES
+        val modifier = key.codes.isNotEmpty() && KeyCodes.isModifier(key.codes[0])
 
         // A rounded rect offset downwards reads as a soft drop shadow and, unlike
         // Paint.setShadowLayer, is drawn identically on every hardware-accelerated canvas.

@@ -30,15 +30,12 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 
+import com.mua.unmukto.keyboard.KeyCodes;
+
 public class UnmuktoKeyboardService
         extends InputMethodService
         implements KeyboardView.OnKeyboardActionListener,
         UnmuktoKeyboardView.OnKeyLongPressListener {
-
-    static final int KEYCODE_SHIFT_ON = -120;
-    static final int KEYCODE_SHIFT_OFF = -121;
-    /** Leaves Unmukto for another keyboard, so a Bengali-only layer is never a dead end. */
-    static final int KEYCODE_SWITCH_IME = -110;
 
     private UnmuktoKeyboardView ukvMain;
 
@@ -109,15 +106,15 @@ public class UnmuktoKeyboardService
     public void onKey(int primaryCode, int[] keyCodes) {
         // These act on the keyboard itself, so they are handled before the input connection
         // is looked at: a field that has gone away must not take the way out with it.
-        if (primaryCode == KEYCODE_SHIFT_ON) {
+        if (primaryCode == KeyCodes.SHIFT_ON) {
             setShifted(true);
             return;
         }
-        if (primaryCode == KEYCODE_SHIFT_OFF) {
+        if (primaryCode == KeyCodes.SHIFT_OFF) {
             setShifted(false);
             return;
         }
-        if (primaryCode == KEYCODE_SWITCH_IME) {
+        if (primaryCode == KeyCodes.SWITCH_IME) {
             switchToNextKeyboard();
             return;
         }
@@ -125,7 +122,7 @@ public class UnmuktoKeyboardService
         InputConnection ic = getCurrentInputConnection();
         if (ic == null)
             return;
-        if (primaryCode == Keyboard.KEYCODE_DELETE) {
+        if (primaryCode == KeyCodes.DELETE) {
             handleDelete(ic);
         } else if (primaryCode > 0) {
             ic.commitText(String.valueOf((char) primaryCode), 1);
@@ -179,7 +176,7 @@ public class UnmuktoKeyboardService
      */
     @Override
     public boolean onKeyLongPress(int primaryCode) {
-        if (primaryCode != KEYCODE_SWITCH_IME)
+        if (primaryCode != KeyCodes.SWITCH_IME)
             return false;
         showKeyboardPicker();
         return true;
