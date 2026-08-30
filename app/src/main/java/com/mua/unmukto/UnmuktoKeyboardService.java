@@ -32,14 +32,15 @@ import android.view.inputmethod.InputMethodManager;
 
 public class UnmuktoKeyboardService
         extends InputMethodService
-        implements KeyboardView.OnKeyboardActionListener {
+        implements KeyboardView.OnKeyboardActionListener,
+        UnmuktoKeyboardView.OnKeyLongPressListener {
 
     static final int KEYCODE_SHIFT_ON = -120;
     static final int KEYCODE_SHIFT_OFF = -121;
     /** Leaves Unmukto for another keyboard, so a Bengali-only layer is never a dead end. */
     static final int KEYCODE_SWITCH_IME = -110;
 
-    private KeyboardView ukvMain;
+    private UnmuktoKeyboardView ukvMain;
 
     private Keyboard baseKeyboard;
     private Keyboard shiftedKeyboard;
@@ -58,6 +59,7 @@ public class UnmuktoKeyboardService
         shifted = false;
         ukvMain.setKeyboard(baseKeyboard);
         ukvMain.setOnKeyboardActionListener(this);
+        ukvMain.setOnKeyLongPressListener(this);
 
         // Enable key preview popup for better UX
         ukvMain.setPreviewEnabled(true);
@@ -159,6 +161,19 @@ public class UnmuktoKeyboardService
         if (getWindow() == null || getWindow().getWindow() == null)
             return null;
         return getWindow().getWindow().getAttributes().token;
+    }
+
+    /**
+     * A tap on the switch key hops to the next keyboard, which is what someone who just
+     * wants their previous keyboard back is after. Holding it asks for the full system
+     * list instead, for picking a specific one out of several.
+     */
+    @Override
+    public boolean onKeyLongPress(int primaryCode) {
+        if (primaryCode != KEYCODE_SWITCH_IME)
+            return false;
+        showKeyboardPicker();
+        return true;
     }
 
     private void handleDelete(InputConnection ic) {
