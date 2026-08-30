@@ -9,3 +9,5 @@
 local.properties
 
 /app/release/
+
+/secret/
