@@ -1,0 +1,241 @@
+name: Release to Google Play
+
+# Cut a GitHub release and this ships it. The version is *not* bumped here: the
+# release is expected to point at a commit where versionCode and versionName
+# were already raised by hand, and the guard below fails the run when the tag
+# and app/build.gradle disagree. F-Droid reads those two fields with a regex and
+# matches them against the tag, so they have to be literals and they have to
+# match anyway -- this just makes a mismatch loud.
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      track:
+        description: Play track to release to
+        type: choice
+        options: [internal, alpha, beta, production]
+        default: internal
+      dry_run:
+        description: Build, upload and validate, but do not commit the release
+        type: boolean
+        default: true
+
+permissions:
+  contents: read
+
+# Two releases racing each other would fight over the same Play edit.
+concurrency:
+  group: play-release
+  cancel-in-progress: false
+
+env:
+  PACKAGE_NAME: com.mua.unmukto
+
+  # Where a published (non-prerelease) GitHub release goes. Change this one line
+  # to stage through internal first. A GitHub prerelease goes to beta instead.
+  DEFAULT_TRACK: production
+
+  # Play stores What's new per language; this is the one the GitHub release body
+  # is filed under.
+  RELEASE_NOTES_LANGUAGE: en-US
+
+  # The upload certificate Play expects, checked before uploading. Not a secret
+  # -- a certificate fingerprint is in every published APK -- and having it here
+  # turns "403 signed with the wrong key" after a multi-megabyte upload into a
+  # clear failure a step earlier.
+  EXPECTED_UPLOAD_CERT_SHA1: "70:97:AC:82:89:82:2E:9B:EC:5D:33:B6:07:FE:9C:74:EE:0E:DD:53"
+
+jobs:
+  ci:
+    name: CI
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Build debug APK
+        run: ./gradlew assembleDebug --stacktrace
+
+      - name: Unit tests
+        run: ./gradlew testDebugUnitTest --stacktrace
+
+      - name: Lint
+        run: ./gradlew lintDebug
+
+  publish:
+    name: Publish to Play
+    needs: ci
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+          cache: gradle
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Check the release secrets are present
+        env:
+          KEYSTORE: ${{ secrets.GOOGLE_PLAY_UPLOAD_KEYSTORE }}
+          KEYSTORE_PASSWORD: ${{ secrets.GOOGLE_PLAY_UPLOAD_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.GOOGLE_PLAY_UPLOAD_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.GOOGLE_PLAY_UPLOAD_KEY_PASSWORD }}
+          SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+        run: |
+          set -euo pipefail
+          missing=0
+          for name in KEYSTORE KEYSTORE_PASSWORD KEY_ALIAS KEY_PASSWORD SERVICE_ACCOUNT_JSON; do
+            if [ -z "${!name:-}" ]; then
+              echo "::error::Missing secret GOOGLE_PLAY_${name}"
+              missing=1
+            fi
+          done
+          [ "$missing" -eq 0 ] || exit 1
+          echo "All five GOOGLE_PLAY_* secrets are set."
+
+      # Read from build.gradle rather than from the tag, so the artifact and the
+      # Play listing can only ever describe the code that was actually built.
+      - name: Resolve version and track
+        id: resolve
+        env:
+          TAG_NAME: ${{ github.event.release.tag_name }}
+          IS_PRERELEASE: ${{ github.event.release.prerelease }}
+          INPUT_TRACK: ${{ inputs.track }}
+        run: |
+          set -euo pipefail
+          version_code=$(grep -oP '^\s*versionCode\s+\K[0-9]+' app/build.gradle)
+          version_name=$(grep -oP '^\s*versionName\s+"\K[^"]+' app/build.gradle)
+          echo "build.gradle declares versionCode=$version_code versionName=$version_name"
+
+          if [ "${{ github.event_name }}" = "release" ]; then
+            # Accept both "1.2" and "v1.2"; the F-Droid update check expects the
+            # v-prefixed form, so that is what the tags actually look like.
+            if [ "$TAG_NAME" != "$version_name" ] && [ "$TAG_NAME" != "v$version_name" ]; then
+              echo "::error::Release tag '$TAG_NAME' does not match versionName '$version_name' in app/build.gradle. Bump the version and re-tag."
+              exit 1
+            fi
+            release_name="$TAG_NAME"
+            if [ "$IS_PRERELEASE" = "true" ]; then
+              track=beta
+              echo "GitHub release is marked prerelease, so this goes to the beta track."
+            else
+              track="$DEFAULT_TRACK"
+            fi
+          else
+            release_name="v$version_name"
+            track="$INPUT_TRACK"
+          fi
+
+          echo "version_code=$version_code" >> "$GITHUB_OUTPUT"
+          echo "release_name=$release_name" >> "$GITHUB_OUTPUT"
+          echo "track=$track" >> "$GITHUB_OUTPUT"
+          echo "Releasing $release_name (versionCode $version_code) to the $track track."
+
+      - name: Restore the upload keystore
+        env:
+          KEYSTORE: ${{ secrets.GOOGLE_PLAY_UPLOAD_KEYSTORE }}
+          STORE_PASSWORD: ${{ secrets.GOOGLE_PLAY_UPLOAD_KEYSTORE_PASSWORD }}
+        run: |
+          set -euo pipefail
+          mkdir -p secret
+          printf '%s' "$KEYSTORE" | base64 -d > secret/upload-keystore.jks
+          # A truncated or mis-pasted secret decodes to something, so check it is
+          # a keystore before spending a build on it.
+          if ! keytool -list -keystore secret/upload-keystore.jks \
+                -storepass "$STORE_PASSWORD" >/dev/null 2>&1; then
+            echo "::error::secret/upload-keystore.jks did not open. Check GOOGLE_PLAY_UPLOAD_KEYSTORE is base64 of the .jks and that the store password matches."
+            exit 1
+          fi
+          echo "Keystore restored and opens with the configured password."
+
+      - name: Build release bundle
+        env:
+          # build.gradle already reads these four; nothing there needs changing.
+          UNMUKTO_KEYSTORE: ${{ github.workspace }}/secret/upload-keystore.jks
+          UNMUKTO_KEYSTORE_PASSWORD: ${{ secrets.GOOGLE_PLAY_UPLOAD_KEYSTORE_PASSWORD }}
+          UNMUKTO_KEY_ALIAS: ${{ secrets.GOOGLE_PLAY_UPLOAD_KEY_ALIAS }}
+          UNMUKTO_KEY_PASSWORD: ${{ secrets.GOOGLE_PLAY_UPLOAD_KEY_PASSWORD }}
+        run: ./gradlew bundleRelease --stacktrace
+
+      - name: Verify the bundle carries the expected upload certificate
+        run: |
+          set -euo pipefail
+          aab=app/build/outputs/bundle/release/app-release.aab
+          [ -f "$aab" ] || { echo "::error::No bundle at $aab"; exit 1; }
+
+          jarsigner -verify "$aab" > /dev/null
+          found=$(keytool -printcert -jarfile "$aab" \
+                  | grep -m1 -oE 'SHA1: [0-9A-Fa-f:]+' | cut -d' ' -f2 | tr 'a-f' 'A-F')
+          expected=$(echo "$EXPECTED_UPLOAD_CERT_SHA1" | tr 'a-f' 'A-F')
+
+          echo "signing certificate SHA1: $found"
+          if [ "$found" != "$expected" ]; then
+            echo "::error::Bundle is signed with the wrong key. Expected $expected, found $found. Play would reject this upload."
+            exit 1
+          fi
+          echo "Certificate matches the key Play expects."
+
+      # Through a file and an env var, never through ${{ }} inside a script: a
+      # release body is free text written by whoever can publish a release, and
+      # interpolating it into a shell would run it.
+      - name: Collect release notes
+        env:
+          RELEASE_BODY: ${{ github.event.release.body }}
+        run: |
+          set -euo pipefail
+          printf '%s' "${RELEASE_BODY:-}" > release-notes.txt
+          echo "Release notes: $(wc -c < release-notes.txt) bytes from the GitHub release."
+
+      # Every value reaches the command as an environment variable. A release
+      # name is derived from a git tag, and a tag may legally contain backticks
+      # and $(), which a ${{ }} interpolation would hand straight to the shell.
+      - name: Publish
+        env:
+          GOOGLE_PLAY_SERVICE_ACCOUNT_JSON: ${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}
+          TRACK: ${{ steps.resolve.outputs.track }}
+          VERSION_CODE: ${{ steps.resolve.outputs.version_code }}
+          RELEASE_NAME: ${{ steps.resolve.outputs.release_name }}
+          DRY_RUN: ${{ github.event_name == 'workflow_dispatch' && inputs.dry_run }}
+        run: |
+          set -euo pipefail
+          pip install --quiet --disable-pip-version-check google-auth requests
+
+          flags=()
+          if [ "${DRY_RUN:-false}" = "true" ]; then
+            flags+=(--dry-run)
+            echo "::notice::Dry run -- the release will be validated and then discarded."
+          fi
+
+          python3 .github/scripts/play_publish.py \
+            --package "$PACKAGE_NAME" \
+            --aab app/build/outputs/bundle/release/app-release.aab \
+            --track "$TRACK" \
+            --version-code "$VERSION_CODE" \
+            --release-name "$RELEASE_NAME" \
+            --notes-file release-notes.txt \
+            --notes-language "$RELEASE_NOTES_LANGUAGE" \
+            "${flags[@]}"
+
+      - name: Keep the bundle
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aab-versioncode-${{ steps.resolve.outputs.version_code }}
+          path: app/build/outputs/bundle/release/app-release.aab
+          if-no-files-found: ignore
+          retention-days: 30
