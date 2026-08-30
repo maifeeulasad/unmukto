@@ -209,13 +209,25 @@ public class UnmuktoKeyboardService
         return false;
     }
 
+    /**
+     * Deletes one character, where a character is a code point rather than a Java char.
+     *
+     * Everything Bengali fits in one char, so deleting a single unit was right until it
+     * was not: emoji live outside the basic plane and are stored as a surrogate pair, and
+     * removing one half of one leaves an unpaired surrogate in the field, which renders as
+     * a replacement glyph and takes a second press to clear.
+     */
     private void handleDelete(InputConnection ic) {
         CharSequence selectedText = ic.getSelectedText(0);
-        if (TextUtils.isEmpty(selectedText)) {
-            ic.deleteSurroundingText(1, 0);
-        } else {
+        if (!TextUtils.isEmpty(selectedText)) {
             ic.commitText("", 1);
+            return;
         }
+        CharSequence before = ic.getTextBeforeCursor(2, 0);
+        boolean surrogatePair = before != null
+                && before.length() == 2
+                && Character.isSurrogatePair(before.charAt(0), before.charAt(1));
+        ic.deleteSurroundingText(surrogatePair ? 2 : 1, 0);
     }
 
     @Override
