@@ -3,6 +3,12 @@
     <string name="ime_label">Unmukto Keyboard</string>
     <string name="subtype_label_bn">বাংলা (প্রভাত)</string>
 
+    <!-- Layout names, as shown to the user. Bengali first, since that is what the layout
+         is called; the English gloss is for anyone setting the keyboard up for someone
+         else, or arriving from the Play/F-Droid listing. -->
+    <string name="layout_probhat">প্রভাত (Probhat)</string>
+    <string name="layout_alphabetical">বর্ণানুক্রম (Alphabetical)</string>
+
     <string name="setup_title">উন্মুক্ত</string>
     <string name="setup_subtitle">A Bengali keyboard, Probhat layout</string>
 
@@ -13,6 +19,9 @@
     <string name="action_enable">Enable in keyboard settings</string>
     <string name="action_switch">Switch to Unmukto</string>
     <string name="action_switch_away">Switch to another keyboard</string>
+
+    <string name="layout_heading">Keyboard layout</string>
+    <string name="layout_hint">Hold the space bar while typing to switch between layouts.</string>
 
     <string name="test_heading">Try it</string>
     <string name="test_hint">Type something in Bengali…</string>

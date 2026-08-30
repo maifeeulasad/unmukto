@@ -20,7 +20,6 @@ package com.mua.unmukto;
 
 import android.content.Context;
 import android.inputmethodservice.InputMethodService;
-import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.os.Build;
 import android.os.IBinder;
@@ -29,35 +28,46 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
+
+import com.mua.unmukto.keyboard.BuiltInLayoutCatalog;
+import com.mua.unmukto.keyboard.KeyCodes;
+import com.mua.unmukto.keyboard.KeyboardFactory;
+import com.mua.unmukto.keyboard.LayoutController;
+import com.mua.unmukto.keyboard.LayoutStore;
+import com.mua.unmukto.keyboard.SharedPreferencesLayoutStore;
 
 public class UnmuktoKeyboardService
         extends InputMethodService
         implements KeyboardView.OnKeyboardActionListener,
         UnmuktoKeyboardView.OnKeyLongPressListener {
 
-    static final int KEYCODE_SHIFT_ON = -120;
-    static final int KEYCODE_SHIFT_OFF = -121;
-    /** Leaves Unmukto for another keyboard, so a Bengali-only layer is never a dead end. */
-    static final int KEYCODE_SWITCH_IME = -110;
-
     private UnmuktoKeyboardView ukvMain;
 
-    private Keyboard baseKeyboard;
-    private Keyboard shiftedKeyboard;
-    private boolean shifted;
+    private LayoutStore layoutStore;
+    private LayoutController layouts;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        // Outlives the input view, so a layout chosen in one session is still the one that
+        // comes back in the next.
+        layoutStore = new SharedPreferencesLayoutStore(this);
+    }
 
     @Override
     public View onCreateInputView() {
         View view = getLayoutInflater().inflate(R.layout.layout_unmukto, null, false);
         ukvMain = view.findViewById(R.id.ukv_main);
 
-        // Both layers are inflated once and reused; re-parsing the layout XML on every
-        // shift press is wasted work on the input path.
-        baseKeyboard = new Keyboard(this, R.xml.kbd_bn);
-        shiftedKeyboard = new Keyboard(this, R.xml.kbd_bn_shifted);
+        // Rebuilt with the input view rather than held for the life of the service: the
+        // framework recreates this view on exactly the configuration changes that make an
+        // already-inflated Keyboard the wrong width.
+        layouts = new LayoutController(
+                BuiltInLayoutCatalog.INSTANCE, layoutStore, new KeyboardFactory(this));
+        layouts.setListener(keyboard -> ukvMain.setKeyboard(keyboard));
 
-        shifted = false;
-        ukvMain.setKeyboard(baseKeyboard);
+        ukvMain.setKeyboard(layouts.getKeyboard());
         ukvMain.setOnKeyboardActionListener(this);
         ukvMain.setOnKeyLongPressListener(this);
 
@@ -74,14 +84,15 @@ public class UnmuktoKeyboardService
     @Override
     public void onStartInputView(EditorInfo info, boolean restarting) {
         super.onStartInputView(info, restarting);
-        setShifted(false);
+        if (layouts == null)
+            return;
+        layouts.reloadSelection();
+        layouts.setShifted(false);
     }
 
     private void setShifted(boolean shift) {
-        if (ukvMain == null || shifted == shift)
-            return;
-        shifted = shift;
-        ukvMain.setKeyboard(shift ? shiftedKeyboard : baseKeyboard);
+        if (layouts != null)
+            layouts.setShifted(shift);
     }
 
     /**
@@ -109,15 +120,15 @@ public class UnmuktoKeyboardService
     public void onKey(int primaryCode, int[] keyCodes) {
         // These act on the keyboard itself, so they are handled before the input connection
         // is looked at: a field that has gone away must not take the way out with it.
-        if (primaryCode == KEYCODE_SHIFT_ON) {
+        if (primaryCode == KeyCodes.SHIFT_ON) {
             setShifted(true);
             return;
         }
-        if (primaryCode == KEYCODE_SHIFT_OFF) {
+        if (primaryCode == KeyCodes.SHIFT_OFF) {
             setShifted(false);
             return;
         }
-        if (primaryCode == KEYCODE_SWITCH_IME) {
+        if (primaryCode == KeyCodes.SWITCH_IME) {
             switchToNextKeyboard();
             return;
         }
@@ -125,7 +136,7 @@ public class UnmuktoKeyboardService
         InputConnection ic = getCurrentInputConnection();
         if (ic == null)
             return;
-        if (primaryCode == Keyboard.KEYCODE_DELETE) {
+        if (primaryCode == KeyCodes.DELETE) {
             handleDelete(ic);
         } else if (primaryCode > 0) {
             ic.commitText(String.valueOf((char) primaryCode), 1);
@@ -173,16 +184,29 @@ public class UnmuktoKeyboardService
     }
 
     /**
-     * A tap on the switch key hops to the next keyboard, which is what someone who just
-     * wants their previous keyboard back is after. Holding it asks for the full system
-     * list instead, for picking a specific one out of several.
+     * Long presses that mean something other than "open this key's popup".
+     *
+     * <p>A tap on the switch key hops to the next keyboard, which is what someone who just
+     * wants their previous keyboard back is after; holding it asks for the full system list
+     * instead, for picking a specific one out of several.
+     *
+     * <p>Holding space cycles Unmukto's own layouts. It goes on a key that already exists
+     * rather than a new one because the bottom row is full, and on space in particular
+     * because that is where other keyboards put layout switching.
      */
     @Override
     public boolean onKeyLongPress(int primaryCode) {
-        if (primaryCode != KEYCODE_SWITCH_IME)
-            return false;
-        showKeyboardPicker();
-        return true;
+        if (primaryCode == KeyCodes.SWITCH_IME) {
+            showKeyboardPicker();
+            return true;
+        }
+        if (primaryCode == KeyCodes.SPACE && layouts != null) {
+            layouts.selectNext();
+            // The layout changes under the user's thumb, so it says which one it landed on.
+            Toast.makeText(this, layouts.getLayout().getLabelRes(), Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return false;
     }
 
     private void handleDelete(InputConnection ic) {
