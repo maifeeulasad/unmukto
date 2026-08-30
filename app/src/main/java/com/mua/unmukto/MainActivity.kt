@@ -48,6 +48,10 @@ class MainActivity : AppCompatActivity() {
     private val catalog: LayoutCatalog = BuiltInLayoutCatalog
     private lateinit var layoutStore: LayoutStore
 
+    private val selectionListener = LayoutStore.SelectionListener { layoutId ->
+        checkLayout(layoutId)
+    }
+
     private val imm: InputMethodManager
         get() = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
 
@@ -69,6 +73,16 @@ class MainActivity : AppCompatActivity() {
         btnSwitch.setOnClickListener {
             imm.showInputMethodPicker()
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        layoutStore.addSelectionListener(selectionListener)
+    }
+
+    override fun onStop() {
+        layoutStore.removeSelectionListener(selectionListener)
+        super.onStop()
     }
 
     override fun onResume() {
@@ -102,11 +116,11 @@ class MainActivity : AppCompatActivity() {
      * layout added to the catalogue appears here without this screen being touched.
      *
      * The choice is written straight to the store, which is the same one the keyboard reads
-     * on its way into a field. There is no message to send: the keyboard is not running
-     * while the user is on this screen, and it re-reads the store when it next comes up.
+     * on its way into a field, and the store reports back when the keyboard is the one that
+     * changed it -- which happens on this very screen, since it has a field to try the
+     * keyboard out in.
      */
     private fun showLayoutChoices() {
-        val selected = catalog.find(layoutStore.selectedLayoutId) ?: catalog.default
         for (layout in catalog.layouts) {
             rgLayout.addView(
                 RadioButton(this).apply {
@@ -114,7 +128,6 @@ class MainActivity : AppCompatActivity() {
                     tag = layout.id
                     setText(layout.labelRes)
                     textSize = 16f
-                    isChecked = layout.id == selected.id
                 },
                 RadioGroup.LayoutParams(
                     RadioGroup.LayoutParams.MATCH_PARENT,
@@ -124,10 +137,26 @@ class MainActivity : AppCompatActivity() {
         }
         // Attached after the initial checks, which would otherwise report themselves as a
         // choice the user made and write the default back out.
+        checkLayout(layoutStore.selectedLayoutId)
+        // Attached after the initial check, which would otherwise report itself as a choice
+        // the user made and write the default back out.
         rgLayout.setOnCheckedChangeListener { group, checkedId ->
             val chosen = group.findViewById<RadioButton>(checkedId) ?: return@setOnCheckedChangeListener
             layoutStore.selectedLayoutId = chosen.tag as? String
         }
+    }
+
+    /**
+     * Moves the check to whichever layout is selected, wherever the selection came from.
+     *
+     * The guard is what keeps this from looping: checking a button fires the change
+     * listener, which writes to the store, which reports back here.
+     */
+    private fun checkLayout(layoutId: String?) {
+        val selected = catalog.find(layoutId) ?: catalog.default
+        val button = rgLayout.findViewWithTag<RadioButton>(selected.id) ?: return
+        if (!button.isChecked)
+            button.isChecked = true
     }
 
     /** True once the user has ticked Unmukto in the system's input method settings. */

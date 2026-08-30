@@ -18,6 +18,7 @@
 package com.mua.unmukto.keyboard
 
 import android.content.Context
+import android.content.SharedPreferences
 
 /**
  * Remembers the layout the user picked.
@@ -31,12 +32,35 @@ interface LayoutStore {
 
     /** Null until the user has chosen anything. */
     var selectedLayoutId: String?
+
+    fun addSelectionListener(listener: SelectionListener)
+
+    fun removeSelectionListener(listener: SelectionListener)
+
+    /**
+     * Reports a selection made through some other holder of the same store.
+     *
+     * The keyboard and the setup screen are both writers, and both can be on screen at
+     * once: the setup screen has a field to try the keyboard out in, so holding space
+     * there changes the layout while the screen's own controls are still showing what was
+     * chosen before.
+     */
+    fun interface SelectionListener {
+        fun onSelectionChanged(layoutId: String?)
+    }
 }
 
 class SharedPreferencesLayoutStore(context: Context) : LayoutStore {
 
     private val preferences =
         context.getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
+
+    // SharedPreferences keeps only a weak reference to a registered listener, so the
+    // wrappers are held here for as long as the caller's listener is registered. Without
+    // this they are collected at a moment of the runtime's choosing and the updates
+    // silently stop.
+    private val wrappers =
+        mutableMapOf<LayoutStore.SelectionListener, SharedPreferences.OnSharedPreferenceChangeListener>()
 
     override var selectedLayoutId: String?
         get() = preferences.getString(KEY_SELECTED_LAYOUT, null)
@@ -45,6 +69,22 @@ class SharedPreferencesLayoutStore(context: Context) : LayoutStore {
             // from the same in-memory map, so the disk write need not block the input path.
             preferences.edit().putString(KEY_SELECTED_LAYOUT, value).apply()
         }
+
+    override fun addSelectionListener(listener: LayoutStore.SelectionListener) {
+        if (wrappers.containsKey(listener))
+            return
+        val wrapper = SharedPreferences.OnSharedPreferenceChangeListener { preferences, key ->
+            if (key == KEY_SELECTED_LAYOUT)
+                listener.onSelectionChanged(preferences.getString(key, null))
+        }
+        wrappers[listener] = wrapper
+        preferences.registerOnSharedPreferenceChangeListener(wrapper)
+    }
+
+    override fun removeSelectionListener(listener: LayoutStore.SelectionListener) {
+        val wrapper = wrappers.remove(listener) ?: return
+        preferences.unregisterOnSharedPreferenceChangeListener(wrapper)
+    }
 
     private companion object {
         const val PREFERENCES_NAME = "unmukto_settings"
