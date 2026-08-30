@@ -20,7 +20,6 @@ package com.mua.unmukto;
 
 import android.content.Context;
 import android.inputmethodservice.InputMethodService;
-import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
 import android.os.Build;
 import android.os.IBinder;
@@ -30,7 +29,12 @@ import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 
+import com.mua.unmukto.keyboard.BuiltInLayoutCatalog;
 import com.mua.unmukto.keyboard.KeyCodes;
+import com.mua.unmukto.keyboard.KeyboardFactory;
+import com.mua.unmukto.keyboard.LayoutController;
+import com.mua.unmukto.keyboard.LayoutStore;
+import com.mua.unmukto.keyboard.SharedPreferencesLayoutStore;
 
 public class UnmuktoKeyboardService
         extends InputMethodService
@@ -39,22 +43,30 @@ public class UnmuktoKeyboardService
 
     private UnmuktoKeyboardView ukvMain;
 
-    private Keyboard baseKeyboard;
-    private Keyboard shiftedKeyboard;
-    private boolean shifted;
+    private LayoutStore layoutStore;
+    private LayoutController layouts;
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        // Outlives the input view, so a layout chosen in one session is still the one that
+        // comes back in the next.
+        layoutStore = new SharedPreferencesLayoutStore(this);
+    }
 
     @Override
     public View onCreateInputView() {
         View view = getLayoutInflater().inflate(R.layout.layout_unmukto, null, false);
         ukvMain = view.findViewById(R.id.ukv_main);
 
-        // Both layers are inflated once and reused; re-parsing the layout XML on every
-        // shift press is wasted work on the input path.
-        baseKeyboard = new Keyboard(this, R.xml.kbd_bn);
-        shiftedKeyboard = new Keyboard(this, R.xml.kbd_bn_shifted);
+        // Rebuilt with the input view rather than held for the life of the service: the
+        // framework recreates this view on exactly the configuration changes that make an
+        // already-inflated Keyboard the wrong width.
+        layouts = new LayoutController(
+                BuiltInLayoutCatalog.INSTANCE, layoutStore, new KeyboardFactory(this));
+        layouts.setListener(keyboard -> ukvMain.setKeyboard(keyboard));
 
-        shifted = false;
-        ukvMain.setKeyboard(baseKeyboard);
+        ukvMain.setKeyboard(layouts.getKeyboard());
         ukvMain.setOnKeyboardActionListener(this);
         ukvMain.setOnKeyLongPressListener(this);
 
@@ -71,14 +83,15 @@ public class UnmuktoKeyboardService
     @Override
     public void onStartInputView(EditorInfo info, boolean restarting) {
         super.onStartInputView(info, restarting);
-        setShifted(false);
+        if (layouts == null)
+            return;
+        layouts.reloadSelection();
+        layouts.setShifted(false);
     }
 
     private void setShifted(boolean shift) {
-        if (ukvMain == null || shifted == shift)
-            return;
-        shifted = shift;
-        ukvMain.setKeyboard(shift ? shiftedKeyboard : baseKeyboard);
+        if (layouts != null)
+            layouts.setShifted(shift);
     }
 
     /**
