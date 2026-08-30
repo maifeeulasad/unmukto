@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Inflated into EmojiPanelView itself, which is the LinearLayout these are the children
+    of. No horizontal padding, for the same reason layout_unmukto.xml has none: the action
+    row is a Keyboard and sizes its keys against the display width.
+-->
+<merge xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <HorizontalScrollView
+        android:id="@+id/emoji_tab_scroll"
+        android:layout_width="match_parent"
+        android:layout_height="44dp"
+        android:fillViewport="true"
+        android:scrollbars="none">
+
+        <!-- Filled in from the emoji catalogue, so a category is added in one place. -->
+        <LinearLayout
+            android:id="@+id/emoji_tabs"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"/>
+
+    </HorizontalScrollView>
+
+    <!--
+        A fixed height rather than wrap_content: this is the scrolling part, and letting it
+        take the height of its contents would size the whole keyboard to the number of emoji
+        the device happens to have a font for.
+    -->
+    <GridView
+        android:id="@+id/emoji_grid"
+        android:layout_width="match_parent"
+        android:layout_height="208dp"
+        android:fadeScrollbars="true"
+        android:horizontalSpacing="0dp"
+        android:numColumns="8"
+        android:scrollbarStyle="insideOverlay"
+        android:stretchMode="columnWidth"
+        android:verticalSpacing="0dp"/>
+
+    <com.mua.unmukto.UnmuktoKeyboardView
+        android:id="@+id/emoji_actions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:keyBackground="@android:color/transparent"
+        android:keyPreviewLayout="@layout/key_preview"
+        android:keyPreviewOffset="-8dp"
+        android:keyPreviewHeight="64dp"
+        android:shadowColor="@android:color/transparent"
+        android:shadowRadius="0"/>
+
+</merge>
