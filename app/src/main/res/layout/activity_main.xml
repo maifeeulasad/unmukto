@@ -72,6 +72,14 @@
             android:orientation="vertical"/>
 
         <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:text="@string/layout_hint"
+            android:textSize="14sp"
+            android:textColor="?android:attr/textColorSecondary"/>
+
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"

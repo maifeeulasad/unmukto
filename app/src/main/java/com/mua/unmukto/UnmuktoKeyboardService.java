@@ -28,6 +28,7 @@ import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Toast;
 
 import com.mua.unmukto.keyboard.BuiltInLayoutCatalog;
 import com.mua.unmukto.keyboard.KeyCodes;
@@ -183,16 +184,29 @@ public class UnmuktoKeyboardService
     }
 
     /**
-     * A tap on the switch key hops to the next keyboard, which is what someone who just
-     * wants their previous keyboard back is after. Holding it asks for the full system
-     * list instead, for picking a specific one out of several.
+     * Long presses that mean something other than "open this key's popup".
+     *
+     * <p>A tap on the switch key hops to the next keyboard, which is what someone who just
+     * wants their previous keyboard back is after; holding it asks for the full system list
+     * instead, for picking a specific one out of several.
+     *
+     * <p>Holding space cycles Unmukto's own layouts. It goes on a key that already exists
+     * rather than a new one because the bottom row is full, and on space in particular
+     * because that is where other keyboards put layout switching.
      */
     @Override
     public boolean onKeyLongPress(int primaryCode) {
-        if (primaryCode != KeyCodes.SWITCH_IME)
-            return false;
-        showKeyboardPicker();
-        return true;
+        if (primaryCode == KeyCodes.SWITCH_IME) {
+            showKeyboardPicker();
+            return true;
+        }
+        if (primaryCode == KeyCodes.SPACE && layouts != null) {
+            layouts.selectNext();
+            // The layout changes under the user's thumb, so it says which one it landed on.
+            Toast.makeText(this, layouts.getLayout().getLabelRes(), Toast.LENGTH_SHORT).show();
+            return true;
+        }
+        return false;
     }
 
     private void handleDelete(InputConnection ic) {

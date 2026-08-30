@@ -21,6 +21,7 @@
     <string name="action_switch_away">Switch to another keyboard</string>
 
     <string name="layout_heading">Keyboard layout</string>
+    <string name="layout_hint">Hold the space bar while typing to switch between layouts.</string>
 
     <string name="test_heading">Try it</string>
     <string name="test_hint">Type something in Bengali…</string>
