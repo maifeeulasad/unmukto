@@ -7,6 +7,7 @@
          is called; the English gloss is for anyone setting the keyboard up for someone
          else, or arriving from the Play/F-Droid listing. -->
     <string name="layout_probhat">প্রভাত (Probhat)</string>
+    <string name="layout_alphabetical">বর্ণানুক্রম (Alphabetical)</string>
 
     <string name="setup_title">উন্মুক্ত</string>
     <string name="setup_subtitle">A Bengali keyboard, Probhat layout</string>

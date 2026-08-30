@@ -59,7 +59,14 @@ object BuiltInLayoutCatalog : LayoutCatalog {
         shiftedLayer = R.xml.kbd_bn_shifted
     )
 
-    override val layouts: List<KeyboardLayout> = listOf(PROBHAT)
+    val ALPHABETICAL = KeyboardLayout(
+        id = "bn_alphabetical",
+        labelRes = R.string.layout_alphabetical,
+        baseLayer = R.xml.kbd_bn_alpha,
+        shiftedLayer = R.xml.kbd_bn_alpha_shifted
+    )
+
+    override val layouts: List<KeyboardLayout> = listOf(PROBHAT, ALPHABETICAL)
 
     override val default: KeyboardLayout = PROBHAT
 }

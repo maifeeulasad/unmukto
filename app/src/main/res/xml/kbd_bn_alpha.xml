@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Base layer of the Bengali alphabetical layout.
+
+    The alphabet is laid out in dictionary order and simply continues onto the shifted
+    layer: the vowels and the first twenty consonants, ক through ন, are here, and প
+    through the signs are on the shifted layer. Nothing is arranged by frequency, which
+    is the whole point — someone who knows the alphabet and not a keyboard can find a
+    letter by counting rather than by hunting.
+
+    The vowel row is eleven keys wide because there are eleven vowels, and splitting
+    them across two rows would break the one property this layout has. Each vowel sits
+    directly above its own vowel sign on the shifted layer.
+
+    See kbd_bn.xml for why horizontalGap is 0.
+-->
+<Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
+    android:horizontalGap="0dp"
+    android:verticalGap="0dp"
+    android:keyHeight="52dp"
+    android:keyWidth="10%p">
+
+    <!-- Row 1: Numbers -->
+    <Row>
+        <Key android:codes="-131" android:keyOutputText="১" android:keyLabel="১" android:keyEdgeFlags="left"/>
+        <Key android:codes="-132" android:keyOutputText="২" android:keyLabel="২"/>
+        <Key android:codes="-133" android:keyOutputText="৩" android:keyLabel="৩"/>
+        <Key android:codes="-134" android:keyOutputText="৪" android:keyLabel="৪"/>
+        <Key android:codes="-135" android:keyOutputText="৫" android:keyLabel="৫"/>
+        <Key android:codes="-136" android:keyOutputText="৬" android:keyLabel="৬"/>
+        <Key android:codes="-137" android:keyOutputText="৭" android:keyLabel="৭"/>
+        <Key android:codes="-138" android:keyOutputText="৮" android:keyLabel="৮"/>
+        <Key android:codes="-139" android:keyOutputText="৯" android:keyLabel="৯"/>
+        <Key android:codes="-130" android:keyOutputText="০" android:keyLabel="০" android:keyEdgeFlags="right"/>
+    </Row>
+
+    <!-- Row 2: Vowels -->
+    <Row>
+        <Key android:codes="-140" android:keyOutputText="অ" android:keyLabel="অ" android:keyWidth="9%p" android:keyEdgeFlags="left"/>
+        <Key android:codes="-141" android:keyOutputText="আ" android:keyLabel="আ" android:keyWidth="9%p"/>
+        <Key android:codes="-142" android:keyOutputText="ই" android:keyLabel="ই" android:keyWidth="9%p"/>
+        <Key android:codes="-143" android:keyOutputText="ঈ" android:keyLabel="ঈ" android:keyWidth="9%p"/>
+        <Key android:codes="-144" android:keyOutputText="উ" android:keyLabel="উ" android:keyWidth="9%p"/>
+        <Key android:codes="-145" android:keyOutputText="ঊ" android:keyLabel="ঊ" android:keyWidth="9%p"/>
+        <Key android:codes="-146" android:keyOutputText="ঋ" android:keyLabel="ঋ" android:keyWidth="9%p"/>
+        <Key android:codes="-147" android:keyOutputText="এ" android:keyLabel="এ" android:keyWidth="9%p"/>
+        <Key android:codes="-148" android:keyOutputText="ঐ" android:keyLabel="ঐ" android:keyWidth="9%p"/>
+        <Key android:codes="-149" android:keyOutputText="ও" android:keyLabel="ও" android:keyWidth="9%p"/>
+        <Key android:codes="-150" android:keyOutputText="ঔ" android:keyLabel="ঔ" android:keyWidth="9%p" android:keyEdgeFlags="right"/>
+    </Row>
+
+    <!-- Row 3 -->
+    <Row>
+        <Key android:codes="-170" android:keyOutputText="ক" android:keyLabel="ক" android:keyEdgeFlags="left"/>
+        <Key android:codes="-171" android:keyOutputText="খ" android:keyLabel="খ"/>
+        <Key android:codes="-172" android:keyOutputText="গ" android:keyLabel="গ"/>
+        <Key android:codes="-173" android:keyOutputText="ঘ" android:keyLabel="ঘ"/>
+        <Key android:codes="-174" android:keyOutputText="ঙ" android:keyLabel="ঙ"/>
+        <Key android:codes="-175" android:keyOutputText="চ" android:keyLabel="চ"/>
+        <Key android:codes="-176" android:keyOutputText="ছ" android:keyLabel="ছ"/>
+        <Key android:codes="-177" android:keyOutputText="জ" android:keyLabel="জ"/>
+        <Key android:codes="-178" android:keyOutputText="ঝ" android:keyLabel="ঝ"/>
+        <Key android:codes="-179" android:keyOutputText="ঞ" android:keyLabel="ঞ" android:keyEdgeFlags="right"/>
+    </Row>
+
+    <!-- Row 4 -->
+    <Row>
+        <Key android:codes="-180" android:keyOutputText="ট" android:keyLabel="ট" android:keyEdgeFlags="left"/>
+        <Key android:codes="-181" android:keyOutputText="ঠ" android:keyLabel="ঠ"/>
+        <Key android:codes="-182" android:keyOutputText="ড" android:keyLabel="ড"/>
+        <Key android:codes="-183" android:keyOutputText="ঢ" android:keyLabel="ঢ"/>
+        <Key android:codes="-184" android:keyOutputText="ণ" android:keyLabel="ণ"/>
+        <Key android:codes="-185" android:keyOutputText="ত" android:keyLabel="ত"/>
+        <Key android:codes="-186" android:keyOutputText="থ" android:keyLabel="থ"/>
+        <Key android:codes="-187" android:keyOutputText="দ" android:keyLabel="দ"/>
+        <Key android:codes="-188" android:keyOutputText="ধ" android:keyLabel="ধ"/>
+        <Key android:codes="-189" android:keyOutputText="ন" android:keyLabel="ন" android:keyEdgeFlags="right"/>
+    </Row>
+
+    <!-- Row 5: Special Keys -->
+    <Row>
+        <Key android:codes="-120" android:keyLabel="↑" android:keyWidth="15%p" android:keyEdgeFlags="left"/>
+        <Key android:codes="-110" android:keyLabel="🌐" android:keyWidth="10%p"/>
+        <Key android:codes="-300" android:keyOutputText="," android:keyLabel="," android:keyWidth="10%p"/>
+        <Key android:codes="62" android:keyOutputText=" " android:keyLabel="স্পেস" android:keyWidth="40%p"/>
+        <Key android:codes="-301" android:keyOutputText="।" android:keyLabel="।" android:keyWidth="10%p"/>
+        <Key android:codes="-5" android:keyLabel="⌫" android:isRepeatable="true" android:keyWidth="15%p" android:keyEdgeFlags="right"/>
+    </Row>
+</Keyboard>
