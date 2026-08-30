@@ -30,6 +30,7 @@ import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import com.mua.unmukto.emoji.EmojiPanelView;
 import com.mua.unmukto.keyboard.BuiltInLayoutCatalog;
 import com.mua.unmukto.keyboard.KeyCodes;
 import com.mua.unmukto.keyboard.KeyboardFactory;
@@ -43,6 +44,7 @@ public class UnmuktoKeyboardService
         UnmuktoKeyboardView.OnKeyLongPressListener {
 
     private UnmuktoKeyboardView ukvMain;
+    private EmojiPanelView emojiPanel;
 
     private LayoutStore layoutStore;
     private LayoutController layouts;
@@ -63,8 +65,8 @@ public class UnmuktoKeyboardService
         // Rebuilt with the input view rather than held for the life of the service: the
         // framework recreates this view on exactly the configuration changes that make an
         // already-inflated Keyboard the wrong width.
-        layouts = new LayoutController(
-                BuiltInLayoutCatalog.INSTANCE, layoutStore, new KeyboardFactory(this));
+        KeyboardFactory keyboards = new KeyboardFactory(this);
+        layouts = new LayoutController(BuiltInLayoutCatalog.INSTANCE, layoutStore, keyboards);
         layouts.setListener(keyboard -> ukvMain.setKeyboard(keyboard));
 
         ukvMain.setKeyboard(layouts.getKeyboard());
@@ -73,6 +75,15 @@ public class UnmuktoKeyboardService
 
         // Enable key preview popup for better UX
         ukvMain.setPreviewEnabled(true);
+
+        // The panel's action row is a Keyboard like any other, so it goes through the same
+        // listeners: the letters, switch and delete keys behave identically on both sides.
+        emojiPanel = view.findViewById(R.id.emoji_panel);
+        emojiPanel.setOnEmojiSelectedListener(this::commitText);
+        UnmuktoKeyboardView actions = emojiPanel.getActionKeyboardView();
+        actions.setKeyboard(keyboards.keyboard(R.xml.kbd_emoji_actions));
+        actions.setOnKeyboardActionListener(this);
+        actions.setOnKeyLongPressListener(this);
 
         return view;
     }
@@ -84,6 +95,9 @@ public class UnmuktoKeyboardService
     @Override
     public void onStartInputView(EditorInfo info, boolean restarting) {
         super.onStartInputView(info, restarting);
+        // Every field starts on the letters. Coming back to a keyboard still showing the
+        // emoji panel, in another app entirely, reads as the keyboard having lost them.
+        showEmojiPanel(false);
         if (layouts == null)
             return;
         layouts.reloadSelection();
@@ -130,6 +144,14 @@ public class UnmuktoKeyboardService
         }
         if (primaryCode == KeyCodes.SWITCH_IME) {
             switchToNextKeyboard();
+            return;
+        }
+        if (primaryCode == KeyCodes.EMOJI) {
+            showEmojiPanel(true);
+            return;
+        }
+        if (primaryCode == KeyCodes.LETTERS) {
+            showEmojiPanel(false);
             return;
         }
 
@@ -200,7 +222,9 @@ public class UnmuktoKeyboardService
             showKeyboardPicker();
             return true;
         }
-        if (primaryCode == KeyCodes.SPACE && layouts != null) {
+        // Only while the letters are on screen: in the emoji panel there is no layout on
+        // display for the change to be visible in.
+        if (primaryCode == KeyCodes.SPACE && layouts != null && !isEmojiPanelShown()) {
             layouts.selectNext();
             // The layout changes under the user's thumb, so it says which one it landed on.
             Toast.makeText(this, layouts.getLayout().getLabelRes(), Toast.LENGTH_SHORT).show();
@@ -217,6 +241,24 @@ public class UnmuktoKeyboardService
      * removing one half of one leaves an unpaired surrogate in the field, which renders as
      * a replacement glyph and takes a second press to clear.
      */
+    private void showEmojiPanel(boolean show) {
+        if (ukvMain == null || emojiPanel == null)
+            return;
+        emojiPanel.setVisibility(show ? View.VISIBLE : View.GONE);
+        ukvMain.setVisibility(show ? View.GONE : View.VISIBLE);
+    }
+
+    private boolean isEmojiPanelShown() {
+        return emojiPanel != null && emojiPanel.getVisibility() == View.VISIBLE;
+    }
+
+    /** Emoji arrive as whole strings rather than as key codes, so they take the text path. */
+    private void commitText(CharSequence text) {
+        InputConnection ic = getCurrentInputConnection();
+        if (ic != null)
+            ic.commitText(text, 1);
+    }
+
     private void handleDelete(InputConnection ic) {
         CharSequence selectedText = ic.getSelectedText(0);
         if (!TextUtils.isEmpty(selectedText)) {
