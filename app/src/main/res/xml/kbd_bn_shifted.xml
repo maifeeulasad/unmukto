@@ -67,8 +67,9 @@
     <!-- Row 5: Special Keys -->
     <Row>
         <Key android:codes="-121" android:keyLabel="↓" android:keyWidth="15%p" android:keyEdgeFlags="left"/>
+        <Key android:codes="-110" android:keyLabel="🌐" android:keyWidth="10%p"/>
         <Key android:codes="-205" android:keyOutputText="ৎ" android:keyLabel="ৎ" android:keyWidth="10%p"/>
-        <Key android:codes="62" android:keyOutputText=" " android:keyLabel="স্পেস" android:keyWidth="50%p"/>
+        <Key android:codes="62" android:keyOutputText=" " android:keyLabel="স্পেস" android:keyWidth="40%p"/>
         <Key android:codes="-302" android:keyOutputText="?" android:keyLabel="?" android:keyWidth="10%p"/>
         <Key android:codes="-5" android:keyLabel="⌫" android:isRepeatable="true" android:keyWidth="15%p" android:keyEdgeFlags="right"/>
     </Row>

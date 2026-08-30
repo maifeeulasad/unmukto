@@ -49,6 +49,7 @@ class UnmuktoKeyboardView(context: Context, attrs: AttributeSet?) : KeyboardView
         val MODIFIER_CODES = setOf(
             UnmuktoKeyboardService.KEYCODE_SHIFT_ON,
             UnmuktoKeyboardService.KEYCODE_SHIFT_OFF,
+            UnmuktoKeyboardService.KEYCODE_SWITCH_IME,
             Keyboard.KEYCODE_DELETE
         )
 

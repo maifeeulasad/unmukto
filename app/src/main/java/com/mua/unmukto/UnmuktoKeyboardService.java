@@ -18,13 +18,17 @@
 package com.mua.unmukto;
 
 
+import android.content.Context;
 import android.inputmethodservice.InputMethodService;
 import android.inputmethodservice.Keyboard;
 import android.inputmethodservice.KeyboardView;
+import android.os.Build;
+import android.os.IBinder;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputConnection;
+import android.view.inputmethod.InputMethodManager;
 
 public class UnmuktoKeyboardService
         extends InputMethodService
@@ -32,6 +36,8 @@ public class UnmuktoKeyboardService
 
     static final int KEYCODE_SHIFT_ON = -120;
     static final int KEYCODE_SHIFT_OFF = -121;
+    /** Leaves Unmukto for another keyboard, so a Bengali-only layer is never a dead end. */
+    static final int KEYCODE_SWITCH_IME = -110;
 
     private KeyboardView ukvMain;
 
@@ -106,11 +112,53 @@ public class UnmuktoKeyboardService
             setShifted(true);
         } else if (primaryCode == KEYCODE_SHIFT_OFF) {
             setShifted(false);
+        } else if (primaryCode == KEYCODE_SWITCH_IME) {
+            switchToNextKeyboard();
         } else if (primaryCode == Keyboard.KEYCODE_DELETE) {
             handleDelete(ic);
         } else if (primaryCode > 0) {
             ic.commitText(String.valueOf((char) primaryCode), 1);
         }
+    }
+
+    /**
+     * Hands input over to the next enabled keyboard.
+     *
+     * <p>Without this the user has no way back: reaching the system's input method settings
+     * means searching for them, and searching needs a keyboard the system will only ever
+     * bring up as Unmukto. When Unmukto is the only enabled keyboard there is no "next" one
+     * to switch to, so the picker is shown rather than letting the key do nothing.
+     */
+    // The pre-P InputMethodManager.switchToNextInputMethod is deprecated in favour of the
+    // InputMethodService one used above it, which only exists from P onwards.
+    @SuppressWarnings("deprecation")
+    private void switchToNextKeyboard() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+            if (switchToNextInputMethod(false))
+                return;
+        } else if (imm() != null) {
+            IBinder token = inputToken();
+            if (token != null && imm().switchToNextInputMethod(token, false))
+                return;
+        }
+        showKeyboardPicker();
+    }
+
+    private void showKeyboardPicker() {
+        InputMethodManager imm = imm();
+        if (imm != null)
+            imm.showInputMethodPicker();
+    }
+
+    private InputMethodManager imm() {
+        return (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+    }
+
+    /** The IME window's token, which the pre-P switching API identifies the caller by. */
+    private IBinder inputToken() {
+        if (getWindow() == null || getWindow().getWindow() == null)
+            return null;
+        return getWindow().getWindow().getAttributes().token;
     }
 
     private void handleDelete(InputConnection ic) {
