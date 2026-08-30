@@ -72,8 +72,14 @@ class MainActivity : AppCompatActivity() {
                 else -> R.string.status_not_enabled
             }
         )
+        // Reachable whenever Unmukto is enabled, including once it is the active keyboard:
+        // that is the state someone looking for a way back out is in, and disabling the
+        // button there would take away the only exit this screen offers.
         btnEnable.isEnabled = !enabled
-        btnSwitch.isEnabled = enabled && !selected
+        btnSwitch.isEnabled = enabled
+        btnSwitch.setText(
+            if (selected) R.string.action_switch_away else R.string.action_switch
+        )
     }
 
     /** True once the user has ticked Unmukto in the system's input method settings. */

@@ -49,6 +49,7 @@ class UnmuktoKeyboardView(context: Context, attrs: AttributeSet?) : KeyboardView
         val MODIFIER_CODES = setOf(
             UnmuktoKeyboardService.KEYCODE_SHIFT_ON,
             UnmuktoKeyboardService.KEYCODE_SHIFT_OFF,
+            UnmuktoKeyboardService.KEYCODE_SWITCH_IME,
             Keyboard.KEYCODE_DELETE
         )
 
@@ -77,6 +78,20 @@ class UnmuktoKeyboardView(context: Context, attrs: AttributeSet?) : KeyboardView
         textAlign = Paint.Align.CENTER
     }
     private val keyRect = RectF()
+
+    /**
+     * A long press the view resolves itself but cannot act on.
+     *
+     * [KeyboardView] treats a long press as "open this key's popup" and never reports it,
+     * so a key whose long press means something other than a popup -- the input method
+     * switch key -- needs this seam to reach the service.
+     */
+    fun interface OnKeyLongPressListener {
+        /** Returns true once the press is handled, which suppresses the popup. */
+        fun onKeyLongPress(primaryCode: Int): Boolean
+    }
+
+    var onKeyLongPressListener: OnKeyLongPressListener? = null
 
     init {
         isPreviewEnabled = true
@@ -126,6 +141,13 @@ class UnmuktoKeyboardView(context: Context, attrs: AttributeSet?) : KeyboardView
         val metrics = labelPaint.fontMetrics
         val baseline = keyRect.centerY() - (metrics.ascent + metrics.descent) / 2f
         canvas.drawText(label.toString(), keyRect.centerX(), baseline, labelPaint)
+    }
+
+    override fun onLongPress(popupKey: Keyboard.Key): Boolean {
+        val primaryCode = popupKey.codes.firstOrNull()
+        if (primaryCode != null && onKeyLongPressListener?.onKeyLongPress(primaryCode) == true)
+            return true
+        return super.onLongPress(popupKey)
     }
 
     override fun onTouchEvent(event: MotionEvent): Boolean {
