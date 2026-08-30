@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The row along the bottom of the emoji panel.
+
+    It is a Keyboard drawn by UnmuktoKeyboardView rather than a row of buttons so that it
+    looks like the keyboard it replaced and routes through the same key handling. Nothing
+    in it is language-specific; the letters key returns to whichever layout the user was
+    typing with, which the panel itself never needs to know.
+
+    See kbd_bn.xml for why horizontalGap is 0.
+-->
+<Keyboard xmlns:android="http://schemas.android.com/apk/res/android"
+    android:horizontalGap="0dp"
+    android:verticalGap="0dp"
+    android:keyHeight="52dp"
+    android:keyWidth="10%p">
+
+    <Row>
+        <Key android:codes="-113" android:keyLabel="@string/key_label_letters" android:keyWidth="20%p" android:keyEdgeFlags="left"/>
+        <Key android:codes="-110" android:keyLabel="🌐" android:keyWidth="10%p"/>
+        <Key android:codes="62" android:keyOutputText=" " android:keyLabel="@string/key_label_space" android:keyWidth="45%p"/>
+        <Key android:codes="-5" android:keyLabel="⌫" android:isRepeatable="true" android:keyWidth="25%p" android:keyEdgeFlags="right"/>
+    </Row>
+</Keyboard>

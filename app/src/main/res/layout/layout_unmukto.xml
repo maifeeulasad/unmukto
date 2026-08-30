@@ -23,4 +23,15 @@
         android:shadowColor="@android:color/transparent"
         android:shadowRadius="0"/>
 
+    <!--
+        The emoji panel replaces the keyboard rather than sitting beside it: only one of
+        the two is ever visible. Kept as a sibling, and not swapped in and out, because
+        rebuilding it means asking the font about a few thousand code points again.
+    -->
+    <com.mua.unmukto.emoji.EmojiPanelView
+        android:id="@+id/emoji_panel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"/>
+
 </LinearLayout>

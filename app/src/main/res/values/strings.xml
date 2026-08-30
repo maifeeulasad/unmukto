@@ -20,6 +20,22 @@
     <string name="action_switch">Switch to Unmukto</string>
     <string name="action_switch_away">Switch to another keyboard</string>
 
+    <!-- Key labels that are words rather than glyphs. Held here rather than in the layout
+         XML so a layout for another language can override them without a second copy of
+         the layout. -->
+    <string name="key_label_space">স্পেস</string>
+    <string name="key_label_letters">অআ</string>
+
+    <!-- Emoji panel category tabs. The tabs themselves show a glyph; these name them for
+         screen readers. Emoji are not language-specific, so neither are these. -->
+    <string name="emoji_category_smileys">Smileys</string>
+    <string name="emoji_category_people">People</string>
+    <string name="emoji_category_nature">Animals and nature</string>
+    <string name="emoji_category_food">Food and drink</string>
+    <string name="emoji_category_travel">Travel and places</string>
+    <string name="emoji_category_objects">Objects</string>
+    <string name="emoji_category_symbols">Symbols</string>
+
     <string name="layout_heading">Keyboard layout</string>
     <string name="layout_hint">Hold the space bar while typing to switch between layouts.</string>
 

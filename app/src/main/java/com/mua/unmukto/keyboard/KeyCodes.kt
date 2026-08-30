@@ -36,13 +36,18 @@ object KeyCodes {
     const val SHIFT_ON = -120
     const val SHIFT_OFF = -121
 
+    /** Leaves the letters for the emoji panel, and the panel for the letters again. */
+    const val EMOJI = -112
+    const val LETTERS = -113
+
     /** `Keyboard.KEYCODE_DELETE`, restated so this file lists every code the service acts on. */
     const val DELETE = -5
 
     /** Space. Positive, since it is a real code point, but the service treats it as its own key. */
     const val SPACE = 62
 
-    private val KEYBOARD_LEVEL = setOf(SWITCH_IME, SHIFT_ON, SHIFT_OFF, DELETE)
+    private val KEYBOARD_LEVEL =
+        setOf(SWITCH_IME, SHIFT_ON, SHIFT_OFF, DELETE, EMOJI, LETTERS)
 
     /**
      * True for keys that operate on the keyboard itself. They are drawn differently from
