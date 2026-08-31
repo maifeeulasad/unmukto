@@ -52,12 +52,33 @@ public class UnmuktoKeyboardService
     private LayoutStore layoutStore;
     private LayoutController layouts;
 
+    /**
+     * Follows a layout chosen somewhere other than the keyboard.
+     *
+     * onStartInputView already re-reads the store, which covers the next field. It does not
+     * cover the setup screen, which carries a field to try the keyboard out in: the radio
+     * button and the keyboard are on screen together there, and without this the keyboard
+     * ignores the choice until the user leaves and comes back.
+     */
+    private final LayoutStore.SelectionListener selectionListener = layoutId -> {
+        if (layouts != null)
+            layouts.reloadSelection();
+    };
+
     @Override
     public void onCreate() {
         super.onCreate();
         // Outlives the input view, so a layout chosen in one session is still the one that
         // comes back in the next.
         layoutStore = new SharedPreferencesLayoutStore(this);
+        layoutStore.addSelectionListener(selectionListener);
+    }
+
+    @Override
+    public void onDestroy() {
+        if (layoutStore != null)
+            layoutStore.removeSelectionListener(selectionListener);
+        super.onDestroy();
     }
 
     @Override
