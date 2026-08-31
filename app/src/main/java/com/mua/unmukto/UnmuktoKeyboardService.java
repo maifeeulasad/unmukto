@@ -30,6 +30,9 @@ import android.view.inputmethod.InputConnection;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Toast;
 
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+
 import com.mua.unmukto.emoji.EmojiPanelView;
 import com.mua.unmukto.keyboard.BuiltInLayoutCatalog;
 import com.mua.unmukto.keyboard.KeyCodes;
@@ -75,6 +78,8 @@ public class UnmuktoKeyboardService
 
         // Enable key preview popup for better UX
         ukvMain.setPreviewEnabled(true);
+
+        keepClearOfNavigationBar(view);
 
         // The panel's action row is a Keyboard like any other, so it goes through the same
         // listeners: the letters, switch and delete keys behave identically on both sides.
@@ -241,6 +246,34 @@ public class UnmuktoKeyboardService
      * removing one half of one leaves an unpaired surrogate in the field, which renders as
      * a replacement glyph and takes a second press to clear.
      */
+    /**
+     * Keeps the bottom row above the navigation bar.
+     *
+     * The IME window is drawn edge to edge from API 35, so on a gesture-navigation device
+     * the bar sits over the bottom row: the home pill lands on the space bar and the
+     * system's own keyboard-switch button lands on backspace. Both are still touch targets
+     * underneath, which makes the last row of keys unreliable rather than merely ugly.
+     *
+     * The inset is added to the padding the layout already has rather than replacing it. A
+     * platform that hands the IME an already-inset window reports zero here, and the
+     * keyboard then keeps exactly the 8dp it was designed with.
+     */
+    private void keepClearOfNavigationBar(View root) {
+        final int basePaddingBottom = root.getPaddingBottom();
+        ViewCompat.setOnApplyWindowInsetsListener(root, (view, windowInsets) -> {
+            // Fully qualified: InputMethodService has an inner Insets of its own, and it
+            // wins over an import.
+            androidx.core.graphics.Insets bars =
+                    windowInsets.getInsets(WindowInsetsCompat.Type.navigationBars());
+            view.setPadding(
+                    view.getPaddingLeft(),
+                    view.getPaddingTop(),
+                    view.getPaddingRight(),
+                    basePaddingBottom + bars.bottom);
+            return windowInsets;
+        });
+    }
+
     private void showEmojiPanel(boolean show) {
         if (ukvMain == null || emojiPanel == null)
             return;
