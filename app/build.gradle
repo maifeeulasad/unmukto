@@ -20,8 +20,8 @@ android {
         targetSdk 36
         // F-Droid extracts these with a regex and matches them against the git tag it
         // builds from, so they must be literals here -- never computed.
-        versionCode 5
-        versionName "1.4"
+        versionCode 6
+        versionName "1.5"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
