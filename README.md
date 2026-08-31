@@ -5,13 +5,18 @@
 [![Releases](https://img.shields.io/badge/Unmukto-Releases-black.svg?style=for-the-badge&logo=android)](https://github.com/maifeeulasad/unmukto/releases)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg?style=for-the-badge)](LICENSE)
 
-Probhat layout, works entirely offline, and declares no Android permissions at all.
+Two Bengali layouts -- Probhat and one in alphabetical order -- plus an emoji panel.
+Works entirely offline, and declares no Android permissions at all.
 
-## Snaps (2026.07.22)
+## Snaps (1.5)
 
-Base layer             |  Shifted layer
-:-------------------------:|:-------------------------:
-![keyboard-1](https://raw.githubusercontent.com/maifeeulasad/unmukto/gh-pages/snaps/Screenshot_2026-07-22-14-29-06-954_com.mua.unmukto.jpg)  |  ![keyboard-2](https://raw.githubusercontent.com/maifeeulasad/unmukto/gh-pages/snaps/Screenshot_2026-07-22-14-29-10-359_com.mua.unmukto.jpg)
+Probhat | Alphabetical | Emoji
+:---:|:---:|:---:
+![probhat](https://raw.githubusercontent.com/maifeeulasad/unmukto/gh-pages/snaps/unmukto-1.5-probhat.jpg) | ![alphabetical](https://raw.githubusercontent.com/maifeeulasad/unmukto/gh-pages/snaps/unmukto-1.5-alphabetical.jpg) | ![emoji](https://raw.githubusercontent.com/maifeeulasad/unmukto/gh-pages/snaps/unmukto-1.5-emoji.jpg)
+
+Shifted layer | Dark | Dark, emoji
+:---:|:---:|:---:
+![shifted](https://raw.githubusercontent.com/maifeeulasad/unmukto/gh-pages/snaps/unmukto-1.5-shifted.jpg) | ![dark](https://raw.githubusercontent.com/maifeeulasad/unmukto/gh-pages/snaps/unmukto-1.5-dark.jpg) | ![dark emoji](https://raw.githubusercontent.com/maifeeulasad/unmukto/gh-pages/snaps/unmukto-1.5-dark-emoji.jpg)
 
 ## Building
 
