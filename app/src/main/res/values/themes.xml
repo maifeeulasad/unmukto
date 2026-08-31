@@ -1,5 +1,11 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
+    <!--
+        No android:statusBarColor. From API 35 the system draws the bars itself and
+        ignores that attribute, so setting it described a dark bar that never appeared
+        while the icons stayed light — white on white. MainActivity sets the icon
+        appearance from the current theme instead.
+    -->
     <style name="Theme.Unmukto" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="colorPrimary">@color/brand_primary</item>
         <item name="colorPrimaryVariant">@color/brand_primary_dark</item>
@@ -7,7 +13,6 @@
         <item name="colorSecondary">@color/brand_accent</item>
         <item name="colorSecondaryVariant">@color/brand_accent</item>
         <item name="colorOnSecondary">@color/white</item>
-        <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
     </style>
 
 </resources>

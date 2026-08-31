@@ -19,6 +19,8 @@ package com.mua.unmukto
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Configuration
+import android.graphics.Rect
 import android.os.Bundle
 import android.provider.Settings
 import android.view.View
@@ -28,6 +30,9 @@ import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import com.mua.unmukto.keyboard.BuiltInLayoutCatalog
 import com.mua.unmukto.keyboard.LayoutCatalog
 import com.mua.unmukto.keyboard.LayoutStore
@@ -58,6 +63,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        fitSystemBars()
 
         tvStatus = findViewById(R.id.tv_status)
         btnEnable = findViewById(R.id.btn_enable)
@@ -72,6 +78,43 @@ class MainActivity : AppCompatActivity() {
         }
         btnSwitch.setOnClickListener {
             imm.showInputMethodPicker()
+        }
+    }
+
+    /**
+     * Keeps the content out from under the system bars.
+     *
+     * From API 35 an app is drawn edge to edge and cannot opt out, so the window now
+     * reaches behind the status and navigation bars. Without this the title sits under the
+     * clock. The insets are added to the padding the layout already has rather than
+     * replacing it, so the 24dp margin survives on a device that reports no inset at all.
+     *
+     * The bar icons are told which way to contrast at the same time. They default to light,
+     * which is invisible against this screen in the day theme.
+     */
+    private fun fitSystemBars() {
+        val content = findViewById<View>(R.id.setup_content)
+        val padding = Rect(
+            content.paddingLeft, content.paddingTop, content.paddingRight, content.paddingBottom
+        )
+        ViewCompat.setOnApplyWindowInsetsListener(content) { view, windowInsets ->
+            val bars = windowInsets.getInsets(
+                WindowInsetsCompat.Type.systemBars() or WindowInsetsCompat.Type.displayCutout()
+            )
+            view.setPadding(
+                padding.left + bars.left,
+                padding.top + bars.top,
+                padding.right + bars.right,
+                padding.bottom + bars.bottom
+            )
+            windowInsets
+        }
+
+        val lightTheme = resources.configuration.uiMode and
+            Configuration.UI_MODE_NIGHT_MASK != Configuration.UI_MODE_NIGHT_YES
+        WindowInsetsControllerCompat(window, window.decorView).apply {
+            isAppearanceLightStatusBars = lightTheme
+            isAppearanceLightNavigationBars = lightTheme
         }
     }
 
