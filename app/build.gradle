@@ -10,14 +10,14 @@ def keystorePath = System.getenv('UNMUKTO_KEYSTORE') ?: findProperty('unmukto.ke
 def hasReleaseSigning = keystorePath != null && file(keystorePath).exists()
 
 android {
-    compileSdk 35
+    compileSdk 36
 
     namespace 'com.mua.unmukto'
 
     defaultConfig {
         applicationId "com.mua.unmukto"
         minSdk 21
-        targetSdk 35
+        targetSdk 36
         // F-Droid extracts these with a regex and matches them against the git tag it
         // builds from, so they must be literals here -- never computed.
         versionCode 4
