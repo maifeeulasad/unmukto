@@ -79,7 +79,6 @@ class EmojiPanelView @JvmOverloads constructor(
 
     // Declared before init, which reaches them through bind(): a property below an init
     // block is still zero while that block runs.
-    private val selectedTabFill = ContextCompat.getColor(context, R.color.key_surface)
     private val tabPadding = dp(12f).toInt()
     private val itemHeight = dp(52f).toInt()
 
@@ -133,7 +132,10 @@ class EmojiPanelView @JvmOverloads constructor(
         grid.setSelection(0)
         tabs.forEachIndexed { position, tab ->
             val active = position == index
-            tab.setBackgroundColor(if (active) selectedTabFill else Color.TRANSPARENT)
+            // A drawable rather than a flat colour: a colour fills the whole cell, which
+            // squares off against the panel edge and reads as a rendering fault.
+            if (active) tab.setBackgroundResource(R.drawable.emoji_tab_selected)
+            else tab.setBackgroundColor(Color.TRANSPARENT)
             tab.alpha = if (active) 1f else INACTIVE_TAB_ALPHA
         }
         // Posted because a tab that was just added has no position until the strip is laid
