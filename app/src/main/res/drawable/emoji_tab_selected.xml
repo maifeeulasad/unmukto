@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    The selected emoji category. Inset and rounded to the same 8dp the keys use, so the
+    tab reads as one of the keyboard's own surfaces rather than as a panel that has lost
+    its background in one corner.
+-->
+<inset xmlns:android="http://schemas.android.com/apk/res/android"
+    android:insetBottom="6dp"
+    android:insetLeft="4dp"
+    android:insetRight="4dp"
+    android:insetTop="6dp">
+
+    <shape android:shape="rectangle">
+        <corners android:radius="8dp"/>
+        <solid android:color="@color/key_surface"/>
+    </shape>
+
+</inset>

@@ -1,0 +1,3 @@
+Choosing a layout on the setup screen now changes the keyboard straight away, instead of waiting until you open the next text field.
+
+The selected emoji category is drawn as a rounded key rather than a square block against the edge of the panel.
