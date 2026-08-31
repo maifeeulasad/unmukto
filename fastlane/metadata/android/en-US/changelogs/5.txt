@@ -1,0 +1,5 @@
+Now targets Android 16.
+
+The setup screen no longer hides its title under the status bar, and the status icons are readable again rather than white on white.
+
+The bottom row of the keyboard sits above the navigation bar instead of underneath it, so the space bar and backspace no longer share their space with the home gesture and the system keyboard switcher.
