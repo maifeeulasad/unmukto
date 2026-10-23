@@ -1,0 +1,1 @@
+Set minimum SDK version to 24 (Android 7.0) for Play Protect compliance.

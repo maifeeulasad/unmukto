@@ -16,12 +16,12 @@ android {
 
     defaultConfig {
         applicationId "com.mua.unmukto"
-        minSdk 21
+        minSdk 24
         targetSdk 36
         // F-Droid extracts these with a regex and matches them against the git tag it
         // builds from, so they must be literals here -- never computed.
-        versionCode 8
-        versionName "1.7"
+        versionCode 9
+        versionName "1.8"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
