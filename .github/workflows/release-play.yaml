@@ -61,7 +61,7 @@ jobs:
           cache: gradle
 
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
 
       - name: Build debug APK
         run: ./gradlew assembleDebug --stacktrace
@@ -87,7 +87,7 @@ jobs:
           cache: gradle
 
       - name: Set up Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
 
       - name: Check the release secrets are present
         env:
